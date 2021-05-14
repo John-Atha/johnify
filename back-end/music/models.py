@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.fields import BooleanField, CharField, DateField
+from django.db.models.fields import BooleanField, CharField, DateField, EmailField
 from datetime import date
 
 from django.db.models.fields.files import FileField
@@ -8,7 +8,8 @@ from django.db.models.fields.related import ManyToManyField
 
 class User(AbstractUser):
     is_artist = BooleanField(default=False)
-    photo = models.ImageField(default='', null=True)
+    email = EmailField(max_length=100, unique=True, null=False)
+    photo = models.ImageField(default=None, null=True)
     member_since = models.DateField(default=date.today)
     def __str__(self):
         return f"{self.id}, {self.username}, {self.is_artist}"
