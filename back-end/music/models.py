@@ -9,8 +9,17 @@ from django.db.models.fields.related import ManyToManyField
 class User(AbstractUser):
     is_artist = BooleanField(default=False)
     photo = models.ImageField(default='', null=True)
+    member_since = models.DateField(default=date.today)
     def __str__(self):
         return f"{self.id}, {self.username}, {self.is_artist}"
+    def serialize(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'is_artist': self.is_artist,
+        }
+    class Meta:
+        ordering = ['id']
 
 class Album(models.Model):
     photo = models.ImageField(default='', null=True)
