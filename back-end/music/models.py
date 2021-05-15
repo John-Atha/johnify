@@ -34,7 +34,7 @@ class Album(models.Model):
 class Song(models.Model):
     photo = models.ImageField(default='', null=True)
     title = CharField(max_length=100, null=False)
-    file = FileField(null = False)
+    file = FileField(null = False, unique=True)
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="songs", null=False, blank=False)
     date = models.DateField(default=date.today)
     fans = models.ManyToManyField(User, related_name='fav_songs', blank=True)

@@ -4,7 +4,7 @@ from music.models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_artist', 'member_since']
+        fields = ['id', 'username', 'email', 'is_artist', 'member_since', 'photo']
 
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,4 +16,10 @@ class AlbumSerializer(serializers.ModelSerializer):
     artist = UserSerializer(many=False, read_only=True)
     class Meta:
         model = Album
-        fields = ['id', 'title', 'artist', 'date', 'fans']
+        fields = ['id', 'title', 'artist', 'photo', 'date', 'fans']
+
+class SongSerializer(serializers.ModelSerializer):
+    album = AlbumSerializer(many=False, read_only=True)
+    class Meta:
+        model = Song
+        fields = ['id', 'title', 'album', 'file', 'photo', 'date', 'fans']
