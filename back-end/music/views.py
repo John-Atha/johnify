@@ -160,8 +160,20 @@ class OneAlbum(APIView):
     
     @transaction.atomic
     def put(self, request, id):
+        # for photo update
         pass
     
     @transaction.atomic
     def delete(self, request, id):
-        pass
+        try:
+            album = Album.objects.get(id=id)
+        except Album.DoesNotExist:
+            return Response(f"Album '{id}' not found.", status=status.HTTP_400_BAD_REQUEST)
+        if request.user == album.artist:
+            operation = album.delete()    
+            if operation:
+                return Response('Album deleted succesfully', status=status.HTTP_200_OK)
+            else:
+                return Response('Deletion failed.', status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)       

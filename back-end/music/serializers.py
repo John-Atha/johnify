@@ -12,7 +12,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ['username', 'password', 'email', 'is_artist']
 
 class AlbumSerializer(serializers.ModelSerializer):
-    fans = UserSerializer(many=True, read_only=True)
+    #fans = UserSerializer(many=True, read_only=True)
     artist = UserSerializer(many=False, read_only=True)
     class Meta:
         model = Album
