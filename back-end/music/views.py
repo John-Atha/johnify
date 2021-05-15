@@ -59,12 +59,19 @@ class Users(APIView):
     @transaction.atomic
     def post(self, request):
         if 'username' in request.POST and 'password' in request.POST and 'confirmation' in request.POST and 'email' in request.POST:
-            username = request.POST['username']
-            password = request.POST['password']
             confirmation = request.POST['confirmation']
-            email = request.POST['email']
-            if password==confirmation:
-                user = UserCreateSerializer(data=request.POST)
+            data =  {
+                'username': request.POST['username'],
+                'email': request.POST['email'],
+            }
+            if request.POST['password']==request.POST['confirmation']:
+                if 'photo' in request.FILES:
+                    mime_type = get_mime_type(request.FILES['photo'])
+                    if 'image' not in mime_type:
+                        return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
+                    data['photo'] = request.FILES['photo']
+                user = User.objects.create_user(username='dummy', password=request.POST['password'])
+                user = UserSerializer(user, data=data)
                 if user.is_valid():
                     user.save()
                     return Response(user.data, status.HTTP_200_OK)
@@ -92,8 +99,13 @@ class OneUser(APIView):
         except User.DoesNotExist:
             return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         if request.user==user:
-            body = json.loads(request.body)
-            user = UserSerializer(user, data=body, partial=True)
+            data = request.POST.copy()
+            if 'photo' in request.FILES:
+                mime_type = get_mime_type(request.FILES['photo'])
+                if 'image' not in mime_type:
+                    return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
+                data['photo'] = request.FILES['photo']
+            user = UserSerializer(user, data=data, partial=True)
             if user.is_valid():
                 user.save()
                 return Response(user.data, status=status.HTTP_200_OK)
@@ -150,6 +162,11 @@ class Albums(APIView):
                         data={
                             'title': title,
                         }
+                        if request.FILES['photo']:
+                            mime_type = get_mime_type(request.FILES['photo'])
+                            if 'image' not in mime_type:
+                                return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
+                            data['photo'] = request.FILES['photo']
                         album = AlbumSerializer(album, data=data)
                         if album.is_valid():
                             album.save()
@@ -169,11 +186,30 @@ class OneAlbum(APIView):
             return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         return Response(AlbumSerializer(album).data, status=status.HTTP_200_OK)
     
+    # for updating title and/or photo of the album
     @transaction.atomic
     def put(self, request, id):
-        # for photo update
-        pass
-    
+        try:
+            album = Album.objects.get(id=id)
+        except Album.DoesNotExist:
+            return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if request.user != album.artist:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+        data = {
+            'title': request.POST['title'],
+        }
+        if request.FILES['photo']:
+            mime_type = get_mime_type(request.FILES['photo'])
+            if 'image' not in mime_type:
+                return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
+            data['photo'] = request.FILES['photo']
+        album = AlbumSerializer(album, data=data, partial=True)
+        if album.is_valid():
+            album.save()
+            return Response(album.data, status=status.HTTP_200_OK)
+        else:
+            return Response(album.errors, status=status.HTTP_400_BAD_REQUEST)
+
     @transaction.atomic
     def delete(self, request, id):
         try:
