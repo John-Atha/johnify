@@ -43,6 +43,13 @@ def get_mime_type(file):
     print(mime_type)
     return mime_type
 
+class Logged(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        return Response(UserSerializer(request.user, context={"request": request}).data, status=status.HTTP_200_OK)
+
+
 class Users(APIView):
     permission_classes = [permissions.AllowAny]
     
@@ -50,9 +57,9 @@ class Users(APIView):
         users = paginate(request.GET.get('start'), request.GET.get('end'), User.objects.all())
         # pagination successfull
         try:
-            users = [UserSerializer(user).data for user in users]
+            users = [UserSerializer(user, context={"request": request}).data for user in users]
         # exception here -> pagination had returned an error
-        except Exception:
+        except Exception as e:
             return users
         return Response(users, status=status.HTTP_200_OK)
     
@@ -71,7 +78,7 @@ class Users(APIView):
                         return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
                     data['photo'] = request.FILES['photo']
                 user = User.objects.create_user(username='dummy', password=request.POST['password'])
-                user = UserSerializer(user, data=data)
+                user = UserSerializer(user, data=data, context={"request": request})
                 if user.is_valid():
                     user.save()
                     return Response(user.data, status.HTTP_200_OK)
@@ -90,7 +97,7 @@ class OneUser(APIView):
             user = User.objects.get(id=id)
         except User.DoesNotExist:
             return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+        return Response(UserSerializer(user, context={"request": request}).data, status=status.HTTP_200_OK)
     
     @transaction.atomic
     def put(self, request, id):
@@ -105,7 +112,7 @@ class OneUser(APIView):
                 if 'image' not in mime_type:
                     return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
                 data['photo'] = request.FILES['photo']
-            user = UserSerializer(user, data=data, partial=True)
+            user = UserSerializer(user, data=data, partial=True, context={"request": request})
             if user.is_valid():
                 user.save()
                 return Response(user.data, status=status.HTTP_200_OK)
@@ -133,10 +140,10 @@ class Albums(APIView):
     permission_classes = [permissions.AllowAny]
     
     def get(self, request):
-        albums = paginate(request.GET.get('start'), request.GET.get('end'), Album.objects.all())
+        albums = paginate(request.GET.get('start'), request.GET.get('end'), Album.objects.all().order_by('-date'))
         # pagination successfull
         try:
-            albums = [AlbumSerializer(album).data for album in albums]
+            albums = [AlbumSerializer(album, context={"request": request}).data for album in albums]
         # exception here -> pagination had returned an error
         except Exception:
             return albums
@@ -167,7 +174,7 @@ class Albums(APIView):
                             if 'image' not in mime_type:
                                 return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
                             data['photo'] = request.FILES['photo']
-                        album = AlbumSerializer(album, data=data)
+                        album = AlbumSerializer(album, data=data, context={"request": request})
                         if album.is_valid():
                             album.save()
                             return Response(album.data, status=status.HTTP_200_OK)
@@ -184,7 +191,7 @@ class OneAlbum(APIView):
             album = Album.objects.get(id=id)
         except Album.DoesNotExist:
             return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-        return Response(AlbumSerializer(album).data, status=status.HTTP_200_OK)
+        return Response(AlbumSerializer(album, context={"request": request}).data, status=status.HTTP_200_OK)
     
     # for updating title and/or photo of the album
     @transaction.atomic
@@ -204,7 +211,7 @@ class OneAlbum(APIView):
                 return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
             data['photo'] = request.FILES['photo']
         if data:
-            album = AlbumSerializer(album, data=data, partial=True)
+            album = AlbumSerializer(album, data=data, partial=True, context={"request": request})
             if album.is_valid():
                 album.save()
                 return Response(album.data, status=status.HTTP_200_OK)
@@ -232,9 +239,9 @@ class Tracks(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.all())
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.all().order_by('-date'))
         try:
-            tracks = [TrackSerializer(track).data for track in tracks]
+            tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
         except Exception:
             return tracks
         return Response(tracks, status=status.HTTP_200_OK)
@@ -265,24 +272,17 @@ class Tracks(APIView):
                 # try serialize
                 data = {
                     'file': request.FILES['file'],
-                    'album': AlbumSerializer(album).data,
+                    'album': AlbumSerializer(album, context={"request": request}).data,
                     'title': request.POST['title'],
                 }
-                if 'kind' in request.POST:
-                    try:
-                        kind = Kind.objects.get(id=request.POST['kind'])
-                    except Kind.DoesNotExist:
-                        return Response(f"Kind '{request.POST['kind']}' not found.", status=status.HTTP_404_NOT_FOUND)
-                    track = Track(album=album, kinds=[kind])
-                else:
-                    track = Track(album = album)
-                track = TrackSerializer(track, data=data)
+                track = Track(album = album)
+                track = TrackSerializer(track, data=data, context={"request": request}, partial=True)
                 if track.is_valid():
                     track.save()
                     return Response(track.data, status=status.HTTP_200_OK)
                 else:
                     return Response(track.errors, status=status.HTTP_400_BAD_REQUEST)
-                return Response(TrackSerializer(track).data, status=status.HTTP_200_OK)
+                return Response(TrackSerializer(track, context={"request": request}).data, status=status.HTTP_200_OK)
             else:
                 return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
         else:
@@ -296,7 +296,7 @@ class OneTrack(APIView):
             track = Track.objects.get(id=id)
         except Track.DoesNotExist:
             return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-        return Response(TrackSerializer(track).data, status=status.HTTP_200_OK)
+        return Response(TrackSerializer(track, context={"request": request}).data, status=status.HTTP_200_OK)
 
     # for updating photo and/or title
     def put(self, request, id):
@@ -325,7 +325,7 @@ class OneTrack(APIView):
                 return Response("Invalid image file.", status=status.HTTP_400_BAD_REQUEST)
             data['photo'] = request.FILES['photo']
         if data:
-            track = TrackSerializer(track, data=data, partial=True)
+            track = TrackSerializer(track, data=data, partial=True, context={"request": request})
             if track.is_valid():
                 track.save()
                 return Response(track.data, status=status.HTTP_200_OK)
@@ -358,7 +358,7 @@ class AlbumTracks(APIView):
         tracks = paginate(request.GET.get('start'), request.GET.get('end'), album.tracks.all())
         # pagination successfull
         try:
-            tracks = [TrackSerializer(track).data for track in tracks]
+            tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
         # error in pagination
         except Exception:
             return tracks
@@ -376,7 +376,7 @@ class UserAlbums(APIView):
             return Response(f"User '{id}' is not an artist.", status=status.HTTP_400_BAD_REQUEST)
         albums = paginate(request.GET.get('start'), request.GET.get('end'), user.albums.all())
         try:
-            albums = [AlbumSerializer(album).data for album in albums]
+            albums = [AlbumSerializer(album, context={"request": request}).data for album in albums]
         except Exception:
             return albums
         return Response(albums, status=status.HTTP_200_OK)
@@ -394,7 +394,7 @@ class UserTracks(APIView):
         albums = user.albums.all()
         tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.filter(album__in=albums))
         try:
-            tracks = [TrackSerializer(track).data for track in tracks]
+            tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
         except Exception:
             return tracks
         return Response(tracks, status=status.HTTP_200_OK)
@@ -409,7 +409,7 @@ class UserFavAlbums(APIView):
             return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         albums = paginate(request.GET.get('start'), request.GET.get('end'), user.fav_albums.all())
         try:
-            albums = [AlbumSerializer(album).data for album in albums]
+            albums = [AlbumSerializer(album, context={"request": request}).data for album in albums]
             print(albums)
         except Exception:
             return albums
@@ -466,7 +466,7 @@ class UserFavTracks(APIView):
             return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         tracks = paginate(request.GET.get('start'), request.GET.get('end'), user.fav_tracks.all())
         try:
-            tracks = [TrackSerializer(track).data for track in tracks]
+            tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
             print(tracks)
         except Exception:
             return tracks
@@ -526,7 +526,7 @@ class AlbumFans(APIView):
             return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         fans = paginate(request.GET.get('start'), request.GET.get('end'), album.fans.all())
         try:
-            fans = [UserSerializer(fan).data for fan in fans]
+            fans = [UserSerializer(fan, context={"request": request}).data for fan in fans]
         except Exception:
             return fans
         return Response(fans, status=status.HTTP_200_OK)
@@ -541,7 +541,7 @@ class TrackFans(APIView):
             return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         fans = paginate(request.GET.get('start'), request.GET.get('end'), track.fans.all())
         try:
-            fans = [UserSerializer(fan).data for fan in fans]
+            fans = [UserSerializer(fan, context={"request": request}).data for fan in fans]
         except Exception:
             return fans
         return Response(fans, status=status.HTTP_200_OK)
@@ -552,7 +552,7 @@ class AlbumsRanking(APIView):
     def get(self, request):
         albums = paginate(request.GET.get('start'), request.GET.get('end'), Album.objects.all().order_by('-fans'))
         try:
-            albums = [AlbumSerializer(album).data for album in albums]
+            albums = [AlbumSerializer(album, context={"request": request}).data for album in albums]
         except Exception:
             return albums
         return Response(albums, status=status.HTTP_200_OK)
@@ -563,7 +563,7 @@ class TracksRanking(APIView):
     def get(self, request):
         tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.all().order_by('-fans'))
         try:
-            tracks = [TrackSerializer(track).data for track in tracks]
+            tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
         except Exception:
             return tracks
         return Response(tracks, status=status.HTTP_200_OK)
@@ -617,7 +617,7 @@ class KindTracks(APIView):
             return Response(f"Kind '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         tracks = paginate(request.GET.get('start'), request.GET.get('end'), kind.tracks.all())
         try:
-            tracks = [TrackSerializer(track).data for track in tracks]
+            tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
         except Exception:
             tracks
         return Response(tracks, status=status.HTTP_200_OK)
@@ -641,7 +641,7 @@ class TrackKinds(APIView):
                         pass
                     track.kinds.add(kind)
                 track.save()
-                return Response(TrackSerializer(track).data, status=status.HTTP_200_OK)
+                return Response(TrackSerializer(track, context={"request": request}).data, status=status.HTTP_200_OK)
             else:
                 return Response("Empty body.", status=status.HTTP_400_BAD_REQUEST)
         else:
