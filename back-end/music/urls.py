@@ -10,8 +10,10 @@ urlpatterns = [
     path('refresh', TokenRefreshView.as_view(), name='token_refresh'),
     path('users', views.Users.as_view(), name='users'),
     path('users/<int:id>', views.OneUser.as_view(), name='one-user'),
+    path('users/<int:id>/albums', views.UserAlbums.as_view(), name='user-albums'),
     path('albums', views.Albums.as_view(), name='albums'),
     path('albums/<int:id>', views.OneAlbum.as_view(), name='one-album'),
+    path('albums/<int:id>/songs', views.AlbumSongs.as_view(), name='album-songs'),
     path('songs', views.Songs.as_view(), name='songs'),
     path('songs/<int:id>', views.OneSong.as_view(), name='one-song'),
 ]

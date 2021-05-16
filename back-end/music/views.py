@@ -330,3 +330,38 @@ class OneSong(APIView):
             return Response("Song deleted successfully.", status=status.HTTP_200_OK)
         else:
             return Response("Could not delete song '{id}'.", status=status.HTTP_400_BAD_REQUEST)
+
+class AlbumSongs(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            album = Album.objects.get(id=id)
+        except Album.DoesNotExist:
+            return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        songs = paginate(request.GET.get('start'), request.GET.get('end'), album.songs.all())
+        # pagination successfull
+        try:
+            songs = [SongSerializer(song).data for song in songs]
+        # error in pagination
+        except Exception:
+            return songs
+        return Response(songs, status=status.HTTP_200_OK)
+
+
+class UserAlbums(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if not user.is_artist:
+            return Response(f"User '{id}' is not an artist.", status=status.HTTP_400_BAD_REQUEST)
+        albums = paginate(request.GET.get('start'), request.GET.get('end'), user.albums.all())
+        try:
+            albums = [AlbumSerializer(album).data for album in albums]
+        except Exception:
+            return albums
+        return Response(albums, status=status.HTTP_200_OK)
