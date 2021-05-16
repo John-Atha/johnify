@@ -1,18 +1,39 @@
+@media only screen and (min-width: 800px) {
+    .my-navbar {
+        width: 10vw;
+    }
+    .famous-skeleton {
+        width: 89vw;
+    }
+}
+@media only screen and (max-width: 800px) {
+    .my-navbar {
+        width: 20vw;
+    }
+    .famous-skeleton {
+        width: 80vw;
+    }
+}
+
 .home-page-desktop {
-    display: grid;
-    grid-template-rows: 80vh 20vh;
     background-color: black;
     color: white;
 }
-.main {
-    display: grid;
-    grid-template-columns: 200px auto;
-}
-.navbar {
+.my-navbar {
     border-right: 1px solid grey;
     background-color: rgb(18, 17, 17);
+    height: inherit;
+}
+.main {
+    width: 100vw;
+    height: 85vh;
 }
 .music-player {
+    position: absolute;
+    bottom: 0;
+    height: 15vh;
+    width: 100%;
+    margin: 0;
     border-top: 1px solid grey;
     background-color: rgb(18, 17, 17);
 }

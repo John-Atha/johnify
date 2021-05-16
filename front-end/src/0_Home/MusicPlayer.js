@@ -3,7 +3,7 @@ import './styles.css';
 
 function MusicPlayer(props) {
     return(
-        <div style={{'gridRow': 2}} className="music-player">
+        <div className="music-player">
             Music player
         </div>
     )

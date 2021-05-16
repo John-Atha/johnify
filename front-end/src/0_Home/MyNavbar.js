@@ -48,7 +48,7 @@ function MyNavbar() {
         }
     }, [])
     return(
-        <div style={{'gridColumn': 1}} className='navbar center-content'>
+        <div className='my-navbar center-content'>
             <MyNavLink name='Johnify' dest='/' icon={home} user={user} />
             <MyNavLink name='Albums' dest='/albums' icon={album} user={user} />
             <MyNavLink name='Tracks' dest='/tracks' icon={track} user={user} />

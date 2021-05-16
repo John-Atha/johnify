@@ -10,7 +10,7 @@ function Home() {
     return(
         <div className="home-page-desktop">
             
-            <div className="main" style={{'gridRow': 1}}>
+            <div className="main flex-layout">
                 <MyNavbar />
                 <FamousSkeleton />
             </div>

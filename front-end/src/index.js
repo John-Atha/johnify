@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
 
 import ReactNotifications from "react-notifications-component";
 import 'react-notifications-component/dist/theme.css'
+import 'bootstrap/dist/css/bootstrap.css';
 
 import './index.css';
 import reportWebVitals from './reportWebVitals';
