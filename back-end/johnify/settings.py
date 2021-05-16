@@ -34,7 +34,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.2.8:3000"
 ] 
 
-CSRF_COOKIE_DOMAIN = "http://localhost:3000/"
+CSRF_COOKIE_DOMAIN = "http://localhost:3000"
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=20),
@@ -59,11 +59,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
