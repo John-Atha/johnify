@@ -31,6 +31,9 @@ class Album(models.Model):
     def __str__(self):
         return f"{self.id}, {self.title}"
 
+class Kind(models.Model):
+    title = models.CharField(unique=True, null=False, default='Unknown', max_length=100)
+
 class Track(models.Model):
     photo = models.ImageField(default='', null=True)
     title = CharField(max_length=100, null=False)
@@ -38,5 +41,6 @@ class Track(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="tracks", null=False, blank=False)
     date = models.DateField(default=date.today)
     fans = models.ManyToManyField(User, related_name='fav_tracks', blank=True)
+    kinds = models.ManyToManyField(Kind, related_name="tracks", blank=True)
     def __str__(self):
         return f"{self.id}, {self.title}"

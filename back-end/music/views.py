@@ -268,8 +268,14 @@ class Tracks(APIView):
                     'album': AlbumSerializer(album).data,
                     'title': request.POST['title'],
                 }
-                print(data)
-                track = Track(album = album)
+                if 'kind' in request.POST:
+                    try:
+                        kind = Kind.objects.get(id=request.POST['kind'])
+                    except Kind.DoesNotExist:
+                        return Response(f"Kind '{request.POST['kind']}' not found.", status=status.HTTP_404_NOT_FOUND)
+                    track = Track(album=album, kinds=[kind])
+                else:
+                    track = Track(album = album)
                 track = TrackSerializer(track, data=data)
                 if track.is_valid():
                     track.save()
@@ -561,3 +567,100 @@ class TracksRanking(APIView):
         except Exception:
             return tracks
         return Response(tracks, status=status.HTTP_200_OK)
+
+class Kinds(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        kinds = paginate(request.GET.get('start'), request.GET.get('end'), Kind.objects.all())
+        try:
+            kinds = [KindSerializer(kind).data for kind in kinds]
+        except Exception:
+            return kinds
+        return Response(kinds, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        if not request.user.is_anonymous:
+            if request.user.is_artist:
+                if 'title' in request.POST:
+                    data = request.POST
+                    kind = KindSerializer(data=data)
+                    if kind.is_valid():
+                        kind.save()
+                        return Response(kind.data, status=status.HTTP_200_OK)
+                    else:
+                        return Response(kind.errors, status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response('No title given.', status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response("Only artists can create new kinds.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+
+class OneKind(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            kind = Kind.objects.get(id=id)
+        except Kind.DoesNotExist:
+            return Response(f"Kind '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        return Response(KindSerializer(kind).data, status=status.HTTP_200_OK)
+
+class KindTracks(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            kind = Kind.objects.get(id=id)
+        except Kind.DoesNotExist:
+            return Response(f"Kind '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), kind.tracks.all())
+        try:
+            tracks = [TrackSerializer(track).data for track in tracks]
+        except Exception:
+            tracks
+        return Response(tracks, status=status.HTTP_200_OK)
+
+class TrackKinds(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, id):
+        try:
+            track = Track.objects.get(id=id)
+        except Track.DoesNotExist:
+            return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if request.user == track.album.artist:
+            if request.body:
+                body = json.loads(request.body)
+                kinds_ids = body['kinds']
+                for kind_id in kinds_ids:
+                    try:
+                        kind = Kind.objects.get(id=kind_id)
+                    except Kind.DoesNotExist:
+                        pass
+                    track.kinds.add(kind)
+                track.save()
+                return Response(TrackSerializer(track).data, status=status.HTTP_200_OK)
+            else:
+                return Response("Empty body.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+    
+    def delete(self, request, id):
+        try:
+            track = Track.objects.get(id=id)
+        except Track.DoesNotExist:
+            return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if request.user == track.album.artist:
+            if 'kind' in request.POST:
+                try:
+                    kind = Kind.objects.get(id=request.POST['kind'])
+                except Kind.DoesNotExist:
+                    return Response(f"Kind '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+                if kind in track.kinds.all():
+                    track.kinds.remove(kind)
+                    track.save()
+            return Response([KindSerializer(kind).data for kind in track.kinds.all()], status=status.HTTP_200_OK)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)

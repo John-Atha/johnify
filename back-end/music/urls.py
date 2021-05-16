@@ -22,5 +22,9 @@ urlpatterns = [
     path('tracks', views.Tracks.as_view(), name='tracks'),
     path('tracks/<int:id>', views.OneTrack.as_view(), name='one-track'),
     path('tracks/<int:id>/fans', views.TrackFans.as_view(), name='track-fans'),
+    path('tracks/<int:id>/kinds', views.TrackKinds.as_view(), name='track-kinds'),
     path('tracks/ranking', views.TracksRanking.as_view(), name='tracks-ranking'),
+    path('kinds', views.Kinds.as_view(), name='kinds'),
+    path('kinds/<int:id>', views.OneKind.as_view(), name='one-kind'),
+    path('kinds/<int:id>/tracks', views.KindTracks.as_view(), name='one-kind'),
 ]

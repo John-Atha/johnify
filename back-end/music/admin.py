@@ -10,6 +10,10 @@ class AlbumAdmin(admin.ModelAdmin):
 class TrackAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'album', 'date')
 
+class KindAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(Track, TrackAdmin)
+admin.site.register(Kind, KindAdmin)
