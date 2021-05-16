@@ -18,7 +18,9 @@ urlpatterns = [
     path('albums/<int:id>', views.OneAlbum.as_view(), name='one-album'),
     path('albums/<int:id>/tracks', views.AlbumTracks.as_view(), name='album-tracks'),
     path('albums/<int:id>/fans', views.AlbumFans.as_view(), name='album-fans'),
+    path('albums/ranking', views.AlbumsRanking.as_view(), name='albums-ranking'),
     path('tracks', views.Tracks.as_view(), name='tracks'),
     path('tracks/<int:id>', views.OneTrack.as_view(), name='one-track'),
     path('tracks/<int:id>/fans', views.TrackFans.as_view(), name='track-fans'),
+    path('tracks/ranking', views.TracksRanking.as_view(), name='tracks-ranking'),
 ]

@@ -539,3 +539,25 @@ class TrackFans(APIView):
         except Exception:
             return fans
         return Response(fans, status=status.HTTP_200_OK)
+
+class AlbumsRanking(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        albums = paginate(request.GET.get('start'), request.GET.get('end'), Album.objects.all().order_by('-fans'))
+        try:
+            albums = [AlbumSerializer(album).data for album in albums]
+        except Exception:
+            return albums
+        return Response(albums, status=status.HTTP_200_OK)
+
+class TracksRanking(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.all().order_by('-fans'))
+        try:
+            tracks = [TrackSerializer(track).data for track in tracks]
+        except Exception:
+            return tracks
+        return Response(tracks, status=status.HTTP_200_OK)
