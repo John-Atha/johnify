@@ -1,0 +1,51 @@
+/*----------- flex -------------- */
+.flex-layout {
+    display: flex;
+    flex-flow: row wrap;
+}
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
+/* ----- */
+.with-whitespace {
+    white-space: pre-wrap;
+    position: relative; 
+}
+/*--------- quick margins-paddings ----------*/
+.center-content {
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.margin {
+    margin: 20px;
+}
+.margin-top {
+    margin-top: 30px;
+}
+.margin-top-small {
+    margin-top: 20px;
+}
+.margin-top-smaller {
+    margin-top: 10px;
+}
+.margin-right {
+    margin-right: 40px !important;
+}
+.margin-left {
+    margin-left: 5px !important;
+}    
+.margin-right-small {
+    margin-right: 20px !important;
+}
+.padding-bottom {
+    padding-bottom: 10px;
+}
+.center-text {
+    text-align: center;
+}
+.padding {
+    padding: 10px 20px;
+}

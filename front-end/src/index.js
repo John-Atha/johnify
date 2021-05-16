@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
+
+import ReactNotifications from "react-notifications-component";
+import 'react-notifications-component/dist/theme.css'
+
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+import Home from './0_Home/Home'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ReactNotifications />
+    <BrowserRouter>
+      <Switch>
+        <Route path='/' exact>
+          <Home />
+        </Route>
+      </Switch>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

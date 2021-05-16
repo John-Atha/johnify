@@ -1,0 +1,2 @@
+home.png, album.png: https://www.iconfinder.com
+colors editted with: https://www2.lunapic.com/editor/

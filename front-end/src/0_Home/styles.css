@@ -1,0 +1,33 @@
+.home-page-desktop {
+    display: grid;
+    grid-template-rows: 80vh 20vh;
+    background-color: black;
+    color: white;
+}
+.main {
+    display: grid;
+    grid-template-columns: 200px auto;
+}
+.navbar {
+    border-right: 1px solid grey;
+    background-color: rgb(18, 17, 17);
+}
+.music-player {
+    border-top: 1px solid grey;
+    background-color: rgb(18, 17, 17);
+}
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    margin: 15px 5px;
+    border-radius: 5px;
+}
+.navbar-link:hover {
+    background-color: grey;
+    cursor: pointer;
+}
+.navbar-icon {
+    height: 20px;
+    margin-top: 15px;
+    margin-left: 5px;
+}
