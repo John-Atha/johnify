@@ -2,12 +2,13 @@ import React from 'react';
 
 import './styles.css';
 import '../generalStyles.css';
-import FamousAlbums from './FamousAlbums';
+import FamousCategory from './FamousCategory';
 
 function FamousSkeleton() {
     return(
-        <div style={{'gridColumn': 2, 'marginLeft': '5px'}}>
-            <FamousAlbums />
+        <div className='famous-skeleton'>
+            <FamousCategory case='albums' />
+            <FamousCategory case='tracks' />
         </div>
     )
 }

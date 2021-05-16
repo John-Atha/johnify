@@ -22,3 +22,9 @@ export const getAlbumsRanking = (start, end) => {
     const requestUrl = '/albums/ranking';
     return axios.get(requestUrl, { params });
 }
+
+export const getTracksRanking = (start, end) => {
+    const params = { start, end};
+    const requestUrl = '/tracks/ranking';
+    return axios.get(requestUrl, { params });
+}
