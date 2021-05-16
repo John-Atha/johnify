@@ -7,9 +7,9 @@ class UserAdmin(admin.ModelAdmin):
 class AlbumAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'artist', 'date')
 
-class SongAdmin(admin.ModelAdmin):
+class TrackAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'album', 'date')
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Album, AlbumAdmin)
-admin.site.register(Song, SongAdmin)
+admin.site.register(Track, TrackAdmin)

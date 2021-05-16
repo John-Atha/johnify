@@ -162,7 +162,7 @@ class Albums(APIView):
                         data={
                             'title': title,
                         }
-                        if request.FILES['photo']:
+                        if 'photo' in request.FILES:
                             mime_type = get_mime_type(request.FILES['photo'])
                             if 'image' not in mime_type:
                                 return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
@@ -195,20 +195,23 @@ class OneAlbum(APIView):
             return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         if request.user != album.artist:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
-        data = {
-            'title': request.POST['title'],
-        }
-        if request.FILES['photo']:
+        data = {}
+        if 'title' in request.POST:
+            data['title'] = request.POST['title']
+        if  'photo' in request.FILES:
             mime_type = get_mime_type(request.FILES['photo'])
             if 'image' not in mime_type:
                 return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
             data['photo'] = request.FILES['photo']
-        album = AlbumSerializer(album, data=data, partial=True)
-        if album.is_valid():
-            album.save()
-            return Response(album.data, status=status.HTTP_200_OK)
+        if data:
+            album = AlbumSerializer(album, data=data, partial=True)
+            if album.is_valid():
+                album.save()
+                return Response(album.data, status=status.HTTP_200_OK)
+            else:
+                return Response(album.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(album.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response('No new data were given.', status=status.HTTP_400_BAD_REQUEST)
 
     @transaction.atomic
     def delete(self, request, id):
@@ -225,16 +228,16 @@ class OneAlbum(APIView):
         else:
             return Response('Unauthorized', status=status.HTTP_401_UNAUTHORIZED)
 
-class Songs(APIView):
+class Tracks(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        songs = paginate(request.GET.get('start'), request.GET.get('end'), Song.objects.all())
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.all())
         try:
-            songs = [SongSerializer(song).data for song in songs]
+            tracks = [TrackSerializer(track).data for track in tracks]
         except Exception:
-            return songs
-        return Response(songs, status=status.HTTP_200_OK)
+            return tracks
+        return Response(tracks, status=status.HTTP_200_OK)
 
     @transaction.atomic
     def post(self, request):
@@ -250,9 +253,9 @@ class Songs(APIView):
                     return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
                 # validate uniqie title inside album
                 try:
-                    song = Song.objects.get(album=album, title=request.POST['title'])
-                    return Response("Song with this title already exists inside this album.", status=status.HTTP_400_BAD_REQUEST)
-                except Song.DoesNotExist:
+                    track = Track.objects.get(album=album, title=request.POST['title'])
+                    return Response("Track with this title already exists inside this album.", status=status.HTTP_400_BAD_REQUEST)
+                except Track.DoesNotExist:
                     pass
                 # validate sound file
                 file = request.FILES['file']
@@ -266,72 +269,79 @@ class Songs(APIView):
                     'title': request.POST['title'],
                 }
                 print(data)
-                song = Song(album = album)
-                song = SongSerializer(song, data=data)
-                if song.is_valid():
-                    song.save()
-                    return Response(song.data, status=status.HTTP_200_OK)
+                track = Track(album = album)
+                track = TrackSerializer(track, data=data)
+                if track.is_valid():
+                    track.save()
+                    return Response(track.data, status=status.HTTP_200_OK)
                 else:
-                    return Response(song.errors, status=status.HTTP_400_BAD_REQUEST)
-                return Response(SongSerializer(song).data, status=status.HTTP_200_OK)
+                    return Response(track.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(TrackSerializer(track).data, status=status.HTTP_200_OK)
             else:
                 return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response("Compulsory fields missing", status=status.HTTP_400_BAD_REQUEST)
 
-class OneSong(APIView):
+class OneTrack(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, id):
         try:
-            song = Song.objects.get(id=id)
-        except Song.DoesNotExist:
-            return Response(f"Song '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-        return Response(SongSerializer(song).data, status=status.HTTP_200_OK)
+            track = Track.objects.get(id=id)
+        except Track.DoesNotExist:
+            return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        return Response(TrackSerializer(track).data, status=status.HTTP_200_OK)
 
     # for updating photo and/or title
     def put(self, request, id):
         try:
-            song = Song.objects.get(id=id)
-        except Song.DoesNotExist:
-            return Response(f"Song '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+            track = Track.objects.get(id=id)
+        except Track.DoesNotExist:
+            return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         # validate user
-        if request.user != song.album.artist:
+        if request.user != track.album.artist:
             print(request.user)
-            print(song.album.artist)
+            print(track.album.artist)
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+        data = {}
         # validate title
-        if song.title!=request.POST['title']:
-            try:
-                duplicate = Song.objects.get(album=song.album, title=request.POST['title'])
-                return Response("Song with this title already exists inside this album.", status=status.HTTP_400_BAD_REQUEST)
-            except Song.DoesNotExist:
-                pass
-        data = {
-            'photo': request.FILES['photo'],
-            'title': request.POST['title'],
-        }
-        song = SongSerializer(song, data=data, partial=True)
-        if song.is_valid():
-            song.save()
-            return Response(song.data, status=status.HTTP_200_OK)
+        if 'title' in request.POST:
+            if track.title!=request.POST['title']:
+                try:
+                    duplicate = Track.objects.get(album=track.album, title=request.POST['title'])
+                    return Response("Track with this title already exists inside this album.", status=status.HTTP_400_BAD_REQUEST)
+                except Track.DoesNotExist:
+                    data['title'] = request.POST['title']
+        # validate photo
+        if 'photo' in request.FILES:
+            mime_type = get_mime_type(request.FILES['photo'])
+            if 'image' not in mime_type:
+                return Response("Invalid image file.", status=status.HTTP_400_BAD_REQUEST)
+            data['photo'] = request.FILES['photo']
+        if data:
+            track = TrackSerializer(track, data=data, partial=True)
+            if track.is_valid():
+                track.save()
+                return Response(track.data, status=status.HTTP_200_OK)
+            else:
+                return Response(track.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(song.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response("No new data were given.", status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id):
         try:
-            song = Song.objects.get(id=id)
-        except Song.DoesNotExist:
-            return Response(f"Song '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-        if request.user != song.album.artist:
+            track = Track.objects.get(id=id)
+        except Track.DoesNotExist:
+            return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if request.user != track.album.artist:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
-        operation = song.delete()
+        operation = track.delete()
         if operation:
-            return Response("Song deleted successfully.", status=status.HTTP_200_OK)
+            return Response("Track deleted successfully.", status=status.HTTP_200_OK)
         else:
-            return Response("Could not delete song '{id}'.", status=status.HTTP_400_BAD_REQUEST)
+            return Response("Could not delete track '{id}'.", status=status.HTTP_400_BAD_REQUEST)
 
-class AlbumSongs(APIView):
+class AlbumTracks(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, id):
@@ -339,14 +349,14 @@ class AlbumSongs(APIView):
             album = Album.objects.get(id=id)
         except Album.DoesNotExist:
             return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-        songs = paginate(request.GET.get('start'), request.GET.get('end'), album.songs.all())
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), album.tracks.all())
         # pagination successfull
         try:
-            songs = [SongSerializer(song).data for song in songs]
+            tracks = [TrackSerializer(track).data for track in tracks]
         # error in pagination
         except Exception:
-            return songs
-        return Response(songs, status=status.HTTP_200_OK)
+            return tracks
+        return Response(tracks, status=status.HTTP_200_OK)
 
 
 class UserAlbums(APIView):
@@ -365,3 +375,30 @@ class UserAlbums(APIView):
         except Exception:
             return albums
         return Response(albums, status=status.HTTP_200_OK)
+
+class UserTracks(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if not user.is_artist:
+            return Response(f"User '{id}' is not an artist.", status=status.HTTP_400_BAD_REQUEST)
+        albums = user.albums.all()
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.filter(album__in=albums))
+        try:
+            tracks = [TrackSerializer(track).data for track in tracks]
+        except Exception:
+            return tracks
+        return Response(tracks, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
