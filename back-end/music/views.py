@@ -394,11 +394,119 @@ class UserTracks(APIView):
             return tracks
         return Response(tracks, status=status.HTTP_200_OK)
 
+class UserFavAlbums(APIView):
+    permission_classes = [permissions.AllowAny]
 
+    def get(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        albums = paginate(request.GET.get('start'), request.GET.get('end'), user.fav_albums.all())
+        try:
+            albums = [AlbumSerializer(album).data for album in albums]
+            print(albums)
+        except Exception:
+            return albums
+        return Response(albums, status=status.HTTP_200_OK)
 
+    # expects album id
+    def post(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if user == request.user:
+            if 'album' in request.POST:
+                try:
+                    album = Album.objects.get(id=request.POST['album'])
+                except Album.DoesNotExist:
+                    return Response(f"Album '{request.POST['album']}' not found.", status=status.HTTP_400_BAD_REQUEST)
+                if album not in user.fav_albums.all():
+                    user.fav_albums.add(album)
+                    user.save()
+                res = [album.id for album in user.fav_albums.all()]
+                return Response({'albums': res}, status=status.HTTP_200_OK)
+            else:
+                return Response("Album id not given.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+    
+    def delete(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if user == request.user:
+            if 'album' in request.POST:
+                try:
+                    album = Album.objects.get(id=request.POST['album'])
+                except Album.DoesNotExist:
+                    return Response(f"Album '{request.POST['album']}' not found.", status=status.HTTP_400_BAD_REQUEST)
+                if album in user.fav_albums.all():
+                    user.fav_albums.remove(album)
+                    user.save()
+                res = { 'albums': [album.id for album in user.fav_albums.all()]}
+                return Response(res, status=status.HTTP_200_OK)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)    
 
+class UserFavTracks(APIView):
+    permission_classes = [permissions.AllowAny]
 
+    def get(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), user.fav_tracks.all())
+        try:
+            tracks = [TrackSerializer(track).data for track in tracks]
+            print(tracks)
+        except Exception:
+            return tracks
+        return Response(tracks, status=status.HTTP_200_OK)
 
+    # expects track id
+    def post(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if user == request.user:
+            if 'track' in request.POST:
+                try:
+                    track = Track.objects.get(id=request.POST['track'])
+                except Track.DoesNotExist:
+                    return Response(f"Track '{request.POST['track']}' not found.", status=status.HTTP_400_BAD_REQUEST)
+                if track not in user.fav_tracks.all():
+                    user.fav_tracks.add(track)
+                    user.save()
+                res = [track.id for track in user.fav_tracks.all()]
+                return Response({'tracks': res}, status=status.HTTP_200_OK)
+            else:
+                return Response("Track id not given.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
 
-
-
+    # expects track id
+    def delete(self, request, id):
+        try:
+            user = User.objects.get(id=id)
+        except User.DoesNotExist:
+            return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        if user == request.user:
+            if 'track' in request.POST:
+                try:
+                    track = Track.objects.get(id=request.POST['track'])
+                except Track.DoesNotExist:
+                    return Response(f"Track '{request.POST['track']}' not found.", status=status.HTTP_400_BAD_REQUEST)
+                if track in user.fav_tracks.all():
+                    user.fav_tracks.remove(track)
+                    user.save()
+                res = [track.id for track in user.fav_tracks.all()]
+                return Response({'tracks': res}, status=status.HTTP_200_OK)
+            else:
+                return Response("Track id not given.", status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
