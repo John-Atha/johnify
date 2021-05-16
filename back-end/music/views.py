@@ -358,7 +358,6 @@ class AlbumTracks(APIView):
             return tracks
         return Response(tracks, status=status.HTTP_200_OK)
 
-
 class UserAlbums(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -510,3 +509,33 @@ class UserFavTracks(APIView):
                 return Response("Track id not given.", status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
+
+class AlbumFans(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            album = Album.objects.get(id=id)
+        except Album.DoesNotExist:
+            return Response(f"Album '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        fans = paginate(request.GET.get('start'), request.GET.get('end'), album.fans.all())
+        try:
+            fans = [UserSerializer(fan).data for fan in fans]
+        except Exception:
+            return fans
+        return Response(fans, status=status.HTTP_200_OK)
+
+class TrackFans(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, id):
+        try:
+            track = Track.objects.get(id=id)
+        except Track.DoesNotExist:
+            return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
+        fans = paginate(request.GET.get('start'), request.GET.get('end'), track.fans.all())
+        try:
+            fans = [UserSerializer(fan).data for fan in fans]
+        except Exception:
+            return fans
+        return Response(fans, status=status.HTTP_200_OK)
