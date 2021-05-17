@@ -11,6 +11,24 @@ const buildAuthHeader = () => {
     return headers;
 }
 
+export const LoginPost = (username, password) => {
+    const requestUrl = '/login';
+    const bodyFormData = new URLSearchParams();
+    bodyFormData.append('username', username);
+    bodyFormData.append('password', password);
+    return axios.post(requestUrl, bodyFormData);
+}
+
+export const RegisterPost = (username, password, confirmation, email, is_artist) => {
+    const requestUrl = '/register';
+    const params = new FormData();
+    params.append('username', username);
+    params.append('password', password);
+    params.append('confirmation', confirmation);
+    params.append('email', email);
+    return axios.post(requestUrl, params);
+}
+
 export const isLogged = () => {
     const headers = buildAuthHeader();
     const requestUrl = '/logged';

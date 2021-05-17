@@ -9,6 +9,7 @@ import album from '../images/album.png';
 import track from '../images/track.png';
 import fav from '../images/fav.png';
 import user_icon from '../images/user.png';
+import logout_icon from '../images/logout.png';
 
 import { createNotification } from '../createNotification';
 
@@ -18,19 +19,25 @@ function MyNavLink(props) {
             {props.icon &&
                 <img src={props.icon} className='navbar-icon' />
             }
-            { props.name==='Favourites' &&
+            {props.name==='Logout' &&
                 <a className='navbar-link'
-                        onClick={()=>{if (props.user) window.location.href=props.dest; else createNotification('danger', 'Sorry,', "You cannot have a favourites list without an account.");}}
-                >Favourites</a>
-
+                   onClick={()=>{localStorage.setItem('token', null); window.location.href='/';}}>
+                    {props.name}
+                </a>
             }
-            { props.name!=='Favourites' && props.case==='user' && props.user!==null &&
+            { props.name!=='Logout' && props.name==='Favourites' &&
+                <a className='navbar-link'
+                        onClick={()=> {
+                             if (props.user) window.location.href=props.dest;
+                             else createNotification('danger', 'Sorry,', "You cannot have a favourites list without an account.");
+                        }}>
+                    Favourites
+                </a>
+            }
+            { props.name!=='Logout' && props.name!=='Favourites' && props.case==='user' &&
                 <a className='navbar-link' href={props.dest}>{props.name}</a>
             }
-            { props.name!=='Favourites' && props.case==='user' && !props.user &&
-                <a aria-disabled={true} className='navbar-link' href='#' style={{'color': 'rgb(237, 112, 112)'}}>{props.name}</a>
-            }
-            { props.name!=='Favourites' &&props.case!=='user' &&
+            { props.name!=='Logout' && props.name!=='Favourites' &&props.case!=='user' &&
                 <a className='navbar-link' href={props.dest}>{props.name}</a>
             }
         </div>
@@ -61,7 +68,10 @@ function MyNavbar() {
             <MyNavLink name='Albums' dest='/albums' icon={album} user={user} />
             <MyNavLink name='Tracks' dest='/tracks' icon={track} user={user} />
             <MyNavLink name='Favourites' dest='/favs' icon={fav} user={user} />
-            <MyNavLink case='user' name={user ? user.username: `Not logged in`} dest={user ? `/users/${user.id}`: null} icon={user_icon}  user={user}/>
+            <MyNavLink case='user' name={user ? user.username: `Log in`} dest={user ? `/users/${user.id}`: '/login'} icon={user_icon}  user={user}/>
+            {user &&
+                <MyNavLink name='Logout' icon={logout_icon} />
+            }
         </div>
     )
 }

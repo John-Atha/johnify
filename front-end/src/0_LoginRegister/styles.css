@@ -1,0 +1,17 @@
+.log-box {
+    border: 1px solid grey;
+    border-radius: 7px;
+    padding: 15px;
+    margin: 15px;
+    width: 400px;
+    margin: auto;
+    margin-top: 20vh;
+    height: 350px;
+}
+.log-input {
+    padding: 5px;
+    border-radius: 7px;
+}
+.log-input:focus {
+    outline: none;
+}

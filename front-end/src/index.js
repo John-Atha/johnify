@@ -13,6 +13,7 @@ import Home from './0_MainPages/Home';
 import AlbumPage from './1_AlbumPage/AlbumPage';
 import AllPage from './0_MainPages/AllPage';
 import FavsPage from './0_MainPages/FavsPage';
+import LoginSkeleton from './0_LoginRegister/LoginSkeleton';
 
 const FindAlbum = () => {
   const {id} = useParams();
@@ -26,6 +27,12 @@ ReactDOM.render(
       <Switch>
         <Route path='/' exact>
           <Home />
+        </Route>
+        <Route path='/login' exact>
+          <LoginSkeleton case='login' />
+        </Route>
+        <Route path='/register' exact>
+          <LoginSkeleton case='register' />
         </Route>
         <Route path='/tracks' exact>
           <AllPage case='tracks' />
