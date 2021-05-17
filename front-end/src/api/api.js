@@ -53,3 +53,17 @@ export const addFavAlbum = (userId, id) => {
     params.append('album', id);
     return axios.post(requestUrl, params, { headers });
 }
+
+export const removeFavTrack = (userId, id) => {
+    const headers = buildAuthHeader();
+    const requestUrl = `/users/${userId}/tracks/fav/${id}`;
+    return axios.delete(requestUrl, { headers });
+}
+
+export const addFavTrack = (userId, id) => {
+    const headers = buildAuthHeader();
+    const requestUrl = `users/${userId}/tracks/fav`;
+    var params = new FormData();
+    params.append('track', id);
+    return axios.post(requestUrl, params, { headers });
+}
