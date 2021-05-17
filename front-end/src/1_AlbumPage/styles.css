@@ -1,0 +1,24 @@
+@media only screen and (max-width:500px) {
+    .tracks-table {
+        width: 100%;
+    }
+}
+@media only screen and (min-width: 500px) {
+    .tracks-table {
+        width: 60%;
+    }
+}
+
+.track-row-even {
+    background-color: rgb(18, 17, 17);
+}
+.track-row-odd {
+    background-color: black;
+}
+.track-row-even:hover, .track-row-odd:hover {
+    background-color: rgb(60, 72, 75);
+}
+.tracks-table {
+    font-size: 20px;
+    margin-top: 40px;
+}

@@ -9,7 +9,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import Home from './0_Home/Home'
+import Home from './0_Home/Home';
+import AlbumPage from './1_AlbumPage/AlbumPage';
+
+const FindAlbum = () => {
+  const {id} = useParams();
+  return <AlbumPage id={id} />
+}
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,6 +24,9 @@ ReactDOM.render(
       <Switch>
         <Route path='/' exact>
           <Home />
+        </Route>
+        <Route path='/albums/:id'>
+          <FindAlbum />
         </Route>
       </Switch>
     </BrowserRouter>

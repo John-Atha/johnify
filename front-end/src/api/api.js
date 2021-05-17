@@ -28,3 +28,14 @@ export const getTracksRanking = (start, end) => {
     const requestUrl = '/tracks/ranking';
     return axios.get(requestUrl, { params });
 }
+
+export const getAlbum = (id) => {
+    const requestUrl = `/albums/${id}`;
+    return axios.get(requestUrl);
+}
+
+export const getAlbumTracks = (id, start=1, end=1000) => {
+    const params = { start, end };
+    const requestUrl = `/albums/${id}/tracks`;
+    return axios.get(requestUrl, { params });
+}
