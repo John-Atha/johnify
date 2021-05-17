@@ -10,19 +10,27 @@ import track from '../images/track.png';
 import fav from '../images/fav.png';
 import user_icon from '../images/user.png';
 
+import { createNotification } from '../createNotification';
+
 function MyNavLink(props) {
     return(
         <div className='flex-layout navbar-link'>
             {props.icon &&
                 <img src={props.icon} className='navbar-icon' />
             }
-            {props.case==='user' && props.user!==null &&
+            { props.name==='Favourites' &&
+                <a className='navbar-link'
+                        onClick={()=>{if (props.user) window.location.href=props.dest; else createNotification('danger', 'Sorry,', "You cannot have a favourites list without an account.");}}
+                >Favourites</a>
+
+            }
+            { props.name!=='Favourites' && props.case==='user' && props.user!==null &&
                 <a className='navbar-link' href={props.dest}>{props.name}</a>
             }
-            {props.case==='user' && !props.user &&
+            { props.name!=='Favourites' && props.case==='user' && !props.user &&
                 <a aria-disabled={true} className='navbar-link' href='#' style={{'color': 'rgb(237, 112, 112)'}}>{props.name}</a>
             }
-            {props.case!=='user' &&
+            { props.name!=='Favourites' &&props.case!=='user' &&
                 <a className='navbar-link' href={props.dest}>{props.name}</a>
             }
         </div>

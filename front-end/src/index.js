@@ -12,6 +12,7 @@ import reportWebVitals from './reportWebVitals';
 import Home from './0_MainPages/Home';
 import AlbumPage from './1_AlbumPage/AlbumPage';
 import AllPage from './0_MainPages/AllPage';
+import FavsPage from './0_MainPages/FavsPage';
 
 const FindAlbum = () => {
   const {id} = useParams();
@@ -31,8 +32,12 @@ ReactDOM.render(
         </Route>
         <Route path='/albums' exact>
           <AllPage case='albums' />
-        </Route>        <Route path='/albums/:id'>
+        </Route>
+        <Route path='/albums/:id'>
           <FindAlbum />
+        </Route>
+        <Route path='/favs'>
+          <FavsPage />
         </Route>
       </Switch>
     </BrowserRouter>

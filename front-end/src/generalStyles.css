@@ -49,3 +49,13 @@
 .padding {
     padding: 10px 20px;
 }
+/* ---- button-as-link ---- */
+.button-as-link {
+    background-color: inherit;
+    padding: auto;
+    border: none;
+    width: auto;
+    margin-top: 10px;
+    text-align: left;
+    color: white;
+}

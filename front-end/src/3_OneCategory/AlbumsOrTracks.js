@@ -7,9 +7,10 @@ import Track from './Track';
 import Error from '../0_MainPages/Error';
 import Button from 'react-bootstrap/Button';
 
-import { getAlbumsRanking, getTracksRanking } from '../api/api';
+import { getAlbumsRanking, getTracksRanking, getFavAlbums, getFavTracks } from '../api/api';
 
 function AlbumsOrTracks(props) {
+    const [userId, setUserId] = useState(props.userId);
     const [data, setData] = useState([]);
     const [noData, setNoData] = useState(false);
     const [start, setStart] = useState(1);
@@ -17,8 +18,12 @@ function AlbumsOrTracks(props) {
 
     const getData = () => {
         let func = getAlbumsRanking;
-        if (props.case==='tracks') {
-            func = getTracksRanking;
+        if (props.how!=='favs') {
+            if (props.case==='tracks') func = getTracksRanking;
+        }
+        if (props.how==='favs') {
+            if (props.case==='tracks') func = getFavTracks;
+            else func = getFavAlbums;
         }
         func(start, end)
         .then(response => {
@@ -35,9 +40,13 @@ function AlbumsOrTracks(props) {
         getData();
     }, [start, end])
 
+    useEffect(() => {
+        setUserId(props.userId);
+    }, [props.userId])
+
     return(
         <div>
-            <h2 className='margin-top-small'>{props.how==='all' ? 'All' : 'Top 5'} {props.case.charAt(0).toUpperCase()+props.case.slice(1)}</h2>
+            <h2 className='margin-top-small'>{props.how==='all' ? 'All' : (props.how==='favs' ? 'Your favourite' : 'Top 5')} {props.case.charAt(0).toUpperCase()+props.case.slice(1)}</h2>
             <div className='albums-container flex-layout'>
                 {props.case==='albums' && data.map((value, index) => {
                     return(
@@ -57,7 +66,7 @@ function AlbumsOrTracks(props) {
                 </Button>
             }  
             {noData &&
-                <Error message={data.length>0 ? `No more ${props.case} found.` : `No ${props.case} found.`} />
+                <Error message={data.length>0 ? `No more ${props.case==='favs' ? 'favourite': ''} ${props.case} found.` : `No ${props.how==='favs' ? 'favourite' : ''} ${props.case} found.`} />
             }
         </div>
     )
