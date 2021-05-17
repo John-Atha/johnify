@@ -46,7 +46,14 @@ function Login() {
             <form onSubmit={submit} className='margin-top-small'>
                 <input className='log-input' type='text' value={username} placeholder='Username...' onChange={(event) => {setUsername(event.target.value)}} />
                 <div className='break'></div>
-                <input className='log-input margin-top-smaller' type='password' value={password} placeholder='Password...' onChange={(event) => {setPassword(event.target.value); setErr(null); setSucc(null);}} />
+                <div className='flex-layout'>
+                    <input  className='log-input margin-top-smaller'
+                            style={{'marginLeft': '53px'}}
+                            type='password'
+                            value={password}
+                            placeholder='Password...'
+                            onChange={(event) => {setPassword(event.target.value); setErr(null); setSucc(null);}} />
+                </div>
                 <div className='break'></div>
                 <Button type='submit' variant='primary' className='margin-top-small' onClick={submit}>Log in</Button>
             </form>

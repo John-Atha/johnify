@@ -20,13 +20,13 @@ export const LoginPost = (username, password) => {
 }
 
 export const RegisterPost = (username, password, confirmation, email, is_artist) => {
-    const requestUrl = '/register';
-    const params = new FormData();
-    params.append('username', username);
-    params.append('password', password);
-    params.append('confirmation', confirmation);
-    params.append('email', email);
-    return axios.post(requestUrl, params);
+    const requestUrl = '/users';
+    const bodyFormData = new URLSearchParams();
+    bodyFormData.append('username', username);
+    bodyFormData.append('password', password);
+    bodyFormData.append('confirmation', confirmation);
+    bodyFormData.append('email', email);
+    return axios.post(requestUrl, bodyFormData);
 }
 
 export const isLogged = () => {

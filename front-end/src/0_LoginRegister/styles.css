@@ -1,12 +1,18 @@
-.log-box {
+.log-box, .reg-box {
     border: 1px solid grey;
     border-radius: 7px;
     padding: 15px;
     margin: 15px;
     width: 400px;
     margin: auto;
-    margin-top: 20vh;
+}
+.log-box {
     height: 350px;
+    margin-top: 20vh;
+}
+.reg-box {
+    height: 500px;
+    margin-top: 5vh;
 }
 .log-input {
     padding: 5px;
