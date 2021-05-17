@@ -9,8 +9,9 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import Home from './0_Home/Home';
+import Home from './0_MainPages/Home';
 import AlbumPage from './1_AlbumPage/AlbumPage';
+import AllPage from './0_MainPages/AllPage';
 
 const FindAlbum = () => {
   const {id} = useParams();
@@ -25,7 +26,12 @@ ReactDOM.render(
         <Route path='/' exact>
           <Home />
         </Route>
-        <Route path='/albums/:id'>
+        <Route path='/tracks' exact>
+          <AllPage case='tracks' />
+        </Route>
+        <Route path='/albums' exact>
+          <AllPage case='albums' />
+        </Route>        <Route path='/albums/:id'>
           <FindAlbum />
         </Route>
       </Switch>

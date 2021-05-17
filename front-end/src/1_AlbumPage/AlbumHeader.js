@@ -17,7 +17,7 @@ function AlbumHeader(props) {
 
     const checkLiked = () => {
         if (album && user) {
-            console.log(album)
+            //console.log(album)
             setLiked( album.fans.includes(user.id));
         }
     }
@@ -39,7 +39,7 @@ function AlbumHeader(props) {
             if (liked) {
                 removeFavAlbum(user.id, album.id)
                 .then(response => {
-                    updateFavs(response.data.albums);
+                    updateFavs(response.data.fans);
                 })
                 .catch(err => {
                     setLiked(false);
@@ -48,7 +48,7 @@ function AlbumHeader(props) {
             else {
                 addFavAlbum(user.id, album.id)
                 .then(response => {
-                    updateFavs(response.data.albums);
+                    updateFavs(response.data.fans);
                 })
                 .catch(err => {
                     setLiked(true);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { isLogged } from '../api/api';
 
-import './styles.css';
+import '../0_MainPages/styles.css';
 import '../generalStyles.css';
 import home from '../images/home.png';
 import album from '../images/album.png';

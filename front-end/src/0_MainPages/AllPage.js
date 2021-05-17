@@ -1,18 +1,16 @@
 import React from 'react';
 
-import './styles.css';
-
 import MyNavbar from '../0_Bars/MyNavbar';
 import MusicPlayer from '../0_Bars/MusicPlayer';
-import AlbumDetails from './AlbumDetails';
+import AllSkeleton from '../2_CategorySkeleton/AllSkeleton';
 
-function AlbumPage(props) {
+function AllPage(props) {
     return(
         <div className="home-page-desktop">
             
             <div className="main flex-layout">
                 <MyNavbar />
-                <AlbumDetails id={props.id} />
+                <AllSkeleton case={props.case} />
             </div>
 
             <MusicPlayer />
@@ -20,4 +18,4 @@ function AlbumPage(props) {
     )
 }
 
-export default AlbumPage;
+export default AllPage;

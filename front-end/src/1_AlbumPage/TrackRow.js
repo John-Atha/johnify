@@ -14,7 +14,11 @@ function TrackRow(props) {
     const [track, setTrack] = useState(props.value);
 
     const checkLiked = () => {
-        setLiked(userId ? track.fans.includes(userId) : false);
+        //console.log('check liked with');
+        //console.log(`user: ${props.userId}`);
+        //console.log('fans:');
+        console.log(props.value.fans);
+        setLiked(props.userId ? props.value.fans.includes(parseInt(props.userId)) : false);
     }
 
     const updateFavs = (data) => {
@@ -34,7 +38,7 @@ function TrackRow(props) {
             if (liked) {
                 removeFavTrack(userId, track.id)
                 .then(response => {
-                    updateFavs(response.data.tracks);
+                    updateFavs(response.data.fans);
                 })
                 .catch(err => {
                     setLiked(false);
@@ -43,7 +47,7 @@ function TrackRow(props) {
             else {
                 addFavTrack(userId, track.id)
                 .then(response => {
-                    updateFavs(response.data.tracks);
+                    updateFavs(response.data.fans);
                 })
                 .catch(err => {
                     setLiked(true);
@@ -54,12 +58,12 @@ function TrackRow(props) {
     
     useEffect(() => {
         setUserId(props.userId);
-        setTimeout(()=>{checkLiked();}, 200);
+        setTimeout(()=>{checkLiked();}, 100);
     }, [props.userId])
 
     useEffect(() => {
         setTrack(props.value);
-        setTimeout(()=>{checkLiked();}, 200);
+        setTimeout(()=>{checkLiked();}, 100);
     }, [props.value])
 
     return(

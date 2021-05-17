@@ -5,7 +5,7 @@ import AlbumHeader from './AlbumHeader';
 import AlbumTracks from './AlbumTracks';
 
 import { getAlbum, isLogged, getAlbumTracks } from '../api/api';
-import Error from '../Error';
+import Error from '../0_MainPages/Error';
 
 
 function AlbumDetails(props) {

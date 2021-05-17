@@ -2,9 +2,9 @@ import React from 'react';
 
 import './styles.css';
 
-import MyNavbar from './MyNavbar';
-import MusicPlayer from './MusicPlayer';
-import FamousSkeleton from '../Famous/FamousSkeleton';
+import MyNavbar from '../0_Bars/MyNavbar';
+import MusicPlayer from '../0_Bars/MusicPlayer';
+import FamousSkeleton from '../2_CategorySkeleton/FamousSkeleton';
 
 function Home() {
     return(

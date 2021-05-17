@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles.css';
+import '../0_MainPages/styles.css';
 
 function MusicPlayer(props) {
     return(
