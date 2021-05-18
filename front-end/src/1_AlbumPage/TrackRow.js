@@ -4,9 +4,11 @@ import './styles.css';
 import like from '../images/fav.png';
 import liked_icon from '../images/fav-checked.png';
 import track_icon from '../images/track.png';
+import play from '../images/play.png';
 
 import { createNotification } from '../createNotification';
 import { removeFavTrack, addFavTrack } from '../api/api';
+
 
 function TrackRow(props) {
     const [userId, setUserId] = useState(props.userId);
@@ -17,12 +19,12 @@ function TrackRow(props) {
         //console.log('check liked with');
         //console.log(`user: ${props.userId}`);
         //console.log('fans:');
-        console.log(props.value.fans);
+        //console.log(props.value.fans);
         setLiked(props.userId ? props.value.fans.includes(parseInt(props.userId)) : false);
     }
 
     const updateFavs = (data) => {
-        console.log(data);
+        //console.log(data);
         const newFans = data;
         const newTrack = track;
         newTrack['fans'] = newFans;
@@ -87,6 +89,16 @@ function TrackRow(props) {
                        src= {liked ? liked_icon : like}
                        onClick={updLike}
                 />            
+            </td>
+            <td>
+                {!props.playing &&
+                    <input type='image' 
+                       style={{'height': '40px'}}
+                       alt='play-pause'
+                       src= {play}
+                       onClick={()=>{props.upd(track)}}
+                    />
+                }
             </td>
         </tr>
     )

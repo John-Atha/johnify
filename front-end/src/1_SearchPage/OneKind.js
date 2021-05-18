@@ -4,6 +4,7 @@ import './styles.css';
 import Error from '../0_MainPages/Error';
 import Track from '../3_OneCategory/Track';
 import Button from 'react-bootstrap/Button';
+import ReactAudioPlayer from 'react-audio-player';
 
 import { getKindTracks } from '../api/api';
 
@@ -14,6 +15,11 @@ function OneKind(props) {
     const [tracks, setTracks] = useState([]);
     const [noMore, setNoMore] = useState(true);
     const [showMore, setShowMore] = useState(false);
+    const [playing, setPlaying] = useState(null);
+
+    const updPlaying = (track) => {
+        setPlaying(track);
+    }
 
     const getTracks = (how='') => {
         if (props.current) {
@@ -42,15 +48,34 @@ function OneKind(props) {
             {noMore &&
                 <Error message={`No ${tracks.length!==0 ? 'more' : ''} tracks of this category were found.`} />
             }
-            {!noMore &&
-                <h2>Tracks</h2>
+
+            {tracks.length>0 &&
+                <h4 className='flex-layout with-whitespace margin-top-small' style={{'color': '#8bdcfc'}}>
+                    {'Now playing: '}
+                    <a  style={{'color': '#8bdcfc', 'textDecoration': (playing ? 'underline' : 'none')}}
+                        href={playing ? `/tracks/${playing.id}` : '#'}>
+                        {playing ? playing.title : 'None'}
+                    </a>
+                </h4>
+            }
+
+            {tracks.length>0 &&
+                <ReactAudioPlayer
+                    style={{'width': '350px', 'marginTop': '5px', 'marginLeft': '10px'}}
+                    src={playing ? playing.file : null}
+                    controls
+                    autoPlay
+                />
             }
             {!noMore &&
                 <div className='flex-layout'>
                     {tracks.map((value, index) => {
                         return(
-                            <Track key={index} track={value} />
-                        )
+                            <Track key={index}
+                                   track={value}
+                                   upd={updPlaying}
+                                   playing={playing ? playing.id===value.id : false} />
+                    )
                     })}
                 </div>
             }

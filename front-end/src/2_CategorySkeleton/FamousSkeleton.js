@@ -6,7 +6,7 @@ import AlbumsOrTracks from '../3_OneCategory/AlbumsOrTracks';
 
 function FamousSkeleton() {
     return(
-        <div className='famous-skeleton'>
+        <div className='famous-skeleton'  style={{'paddingBottom': '20vh'}}>
             <AlbumsOrTracks case='albums' />
             <AlbumsOrTracks case='tracks' />
         </div>

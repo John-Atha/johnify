@@ -74,17 +74,10 @@ function AlbumDetails(props) {
 
 
     return(
-        <div className="famous-skeleton">
+        <div className="famous-skeleton" style={{'paddingBottom': '20vh'}}>
             <AlbumHeader album={album} tracks={tracks} user={user} />
             {!album &&
                 <Error message='Oops, album not found...' />
-            }
-            {album && user && album.artist.id===user.id &&
-                <Button variant='danger'
-                        className='margin'
-                        onClick={()=>{setShowModal(true)}}>
-                    Delete Album
-                </Button>
             }
             {showModal &&
                 <Modal.Dialog style={{'color': 'black', 'position': 'absolute', 'top': '100px'}}>
@@ -108,6 +101,13 @@ function AlbumDetails(props) {
             }
             {album!==null && tracks.length!==0 &&
                 <AlbumTracks tracks = {tracks} user={user} />            
+            }
+            {album && user && album.artist.id===user.id &&
+                <Button variant='danger'
+                        className='margin'
+                        onClick={()=>{setShowModal(true)}}>
+                    Delete Album
+                </Button>
             }
             {album!==null && !tracks.length &&
                 <Error message='Oops, no tracks found here...' />

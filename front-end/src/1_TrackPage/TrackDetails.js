@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 
 import { getTrack, isLogged, deleteTrack } from '../api/api';
 import { createNotification } from '../createNotification';
-
+import ReactAudioPlayer from 'react-audio-player';
 
 function TrackDetails(props) {
     const [track, setTrack] = useState(null);
@@ -60,17 +60,10 @@ function TrackDetails(props) {
 
 
     return(
-        <div className="famous-skeleton">
+        <div className="famous-skeleton" style={{'paddingBottom': '200px'}}>
             <TrackHeader track={track} user={user} />
             {!track &&
                 <Error message='Oops, track not found...' />
-            }
-            {track && user && track.album.artist.id===user.id &&
-                <Button variant='danger'
-                        className='margin'
-                        onClick={()=>{setShowModal(true)}}>
-                    Delete track
-                </Button>
             }
             {showModal &&
                 <Modal.Dialog style={{'color': 'black', 'position': 'absolute', 'top': '100px'}}>
@@ -91,6 +84,23 @@ function TrackDetails(props) {
                         </Button>
                     </Modal.Footer>
                 </Modal.Dialog>
+            }
+            {track &&
+                    <ReactAudioPlayer
+                    style={{'width': '300px', 'marginTop': '20px', 'marginLeft': '10px'}}
+                    src={track.file}
+                    controls
+                    />
+            }
+            {track && user && track.album.artist.id===user.id &&
+                <div>
+                <div className='break' />
+                <Button variant='danger'
+                        className='margin'
+                        onClick={()=>{setShowModal(true)}}>
+                    Delete track
+                </Button>
+                </div>
             }
         </div>
     )

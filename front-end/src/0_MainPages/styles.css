@@ -26,13 +26,15 @@
 }
 .main {
     width: 100vw;
-    height: 85vh;
+    height: 100vh;
 }
 .music-player {
+    z-index: 10;
     position: absolute;
     bottom: 0;
+    left: 0;
     height: 15vh;
-    width: 100%;
+    width: 98vw;
     margin: 0;
     border-top: 1px solid grey;
     background-color: rgb(18, 17, 17);

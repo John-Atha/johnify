@@ -22,7 +22,7 @@ function FavsSkeleton() {
     }, [])
     if (userId) {
         return(
-            <div className='famous-skeleton'>
+            <div className='famous-skeleton' style={{'paddingBottom': '20vh'}}>
                 <AlbumsOrTracks case='albums' how='favs' userId={userId} />
                 <AlbumsOrTracks case='tracks' how='favs' userId={userId} />
             </div>

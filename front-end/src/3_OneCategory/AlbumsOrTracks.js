@@ -6,6 +6,8 @@ import Album from './Album';
 import Track from './Track';
 import Error from '../0_MainPages/Error';
 import Button from 'react-bootstrap/Button';
+import ReactAudioPlayer from 'react-audio-player';
+import MusicPlayer from '../0_Bars/MusicPlayer';
 
 import { getAlbumsRanking, getTracksRanking, getFavAlbums, getFavTracks, getUserTracks, getUserAlbums } from '../api/api';
 
@@ -15,6 +17,11 @@ function AlbumsOrTracks(props) {
     const [noData, setNoData] = useState(false);
     const [start, setStart] = useState(1);
     const [end, setEnd] = useState(5);
+    const [playing, setPlaying] = useState(null);
+
+    const updPlaying = (track) => {
+        setPlaying(track);
+    }
 
     const getData = () => {
         let func = getAlbumsRanking;
@@ -60,9 +67,16 @@ function AlbumsOrTracks(props) {
                         <Album album={value} key={index} />
                     )
                 })}
+                {props.case==='tracks' &&
+                    <MusicPlayer playing={playing} />
+                }
+                <div className='break' />
                 {props.case==='tracks' && data.map((value, index) => {
                     return(
-                        <Track track={value} key={index} />
+                        <Track key={index}
+                                track={value}
+                                upd={updPlaying}
+                                playing={playing ? playing.id===value.id : false} />
                     )
                 })}
             </div>

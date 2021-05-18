@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 
 import './styles.css';
 import MyNavbar from '../0_Bars/MyNavbar';
-import MusicPlayer from '../0_Bars/MusicPlayer';
 import Login from './Login';
 import Register from './Register';
 import { isLogged } from '../api/api';
@@ -21,9 +20,8 @@ function LoginSkeleton(props) {
         }
     }, [])
     return(
-        <div className="home-page-desktop">
+        <div className="home-page-desktop main flex-layout">
             
-            <div className="main flex-layout">
                 <MyNavbar />
                 { props.case==='login' &&
                     <Login />
@@ -31,9 +29,6 @@ function LoginSkeleton(props) {
                 {props.case==='register' &&
                     <Register />
                 }
-            </div>
-
-            <MusicPlayer />
         </div>
     )
 }

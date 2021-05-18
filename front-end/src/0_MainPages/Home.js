@@ -3,7 +3,6 @@ import React from 'react';
 import './styles.css';
 
 import MyNavbar from '../0_Bars/MyNavbar';
-import MusicPlayer from '../0_Bars/MusicPlayer';
 import FamousSkeleton from '../2_CategorySkeleton/FamousSkeleton';
 import FavsSkeleton from '../2_CategorySkeleton/FavsSkeleton';
 import AllSkeleton from '../2_CategorySkeleton/AllSkeleton';
@@ -45,8 +44,6 @@ function Home(props) {
                     <Create />
                 }
             </div>
-
-            <MusicPlayer />
         </div>
     )
 }
