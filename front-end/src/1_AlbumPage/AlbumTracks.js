@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import TrackRow from './TrackRow';
 import './styles.css';
-import ReactAudioPlayer from 'react-audio-player';
 import MusicPlayer from '../0_Bars/MusicPlayer';
 
 function AlbumTracks(props) {

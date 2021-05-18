@@ -5,10 +5,11 @@ import TrackHeader from './TrackHeader';
 import Error from '../0_MainPages/Error';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import MusicPlayer from '../0_Bars/MusicPlayer';
+import ReactAudioPlayer from 'react-audio-player';
 
 import { getTrack, isLogged, deleteTrack } from '../api/api';
 import { createNotification } from '../createNotification';
-import ReactAudioPlayer from 'react-audio-player';
 
 function TrackDetails(props) {
     const [track, setTrack] = useState(null);
@@ -86,11 +87,7 @@ function TrackDetails(props) {
                 </Modal.Dialog>
             }
             {track &&
-                    <ReactAudioPlayer
-                    style={{'width': '300px', 'marginTop': '20px', 'marginLeft': '10px'}}
-                    src={track.file}
-                    controls
-                    />
+                <MusicPlayer playing={track} />
             }
             {track && user && track.album.artist.id===user.id &&
                 <div>

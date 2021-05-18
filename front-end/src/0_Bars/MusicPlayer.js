@@ -36,7 +36,7 @@ function MusicPlayer(props) {
             <ReactAudioPlayer
                 style={{'width': '300px', 'marginTop': '20px', 'marginLeft': '20px'}}
                 src={playing ? playing.file : null}
-                autoPlay
+                autoplay
                 controls
             />
         </div>

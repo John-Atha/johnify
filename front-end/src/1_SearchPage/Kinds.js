@@ -36,7 +36,7 @@ function Kinds(props) {
                     )
                 })}
             </div>
-            <OneKind current={current} />
+            <OneKind playing={props.playing} upd={props.upd} current={current} />
         </div>
     )
 }

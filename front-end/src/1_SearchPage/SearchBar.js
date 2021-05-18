@@ -7,7 +7,7 @@ import Results from './Results';
 
 import { getAlbumsRanking, getTracksRanking } from '../api/api';
 
-function SearchBar() {
+function SearchBar(props) {
     const [albums, setAlbums] = useState([]);
     const [tracks, setTracks] = useState([]);
     const [text, setText] = useState('');
@@ -82,7 +82,7 @@ function SearchBar() {
                     onChange={(event)=>{update(event); console.log('updated');}}
                 />
             </Form>
-            <Results albums={matchingAlbums} tracks={matchingTracks} />
+            <Results playing={props.playing} upd={props.upd} albums={matchingAlbums} tracks={matchingTracks} />
         </div>
     )
 }

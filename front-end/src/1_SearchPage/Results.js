@@ -18,7 +18,7 @@ function Results(props) {
     return(
         <div>
             <ResultsCategory case='albums' data={albums} />
-            <ResultsCategory case='tracks' data={tracks} />
+            <ResultsCategory playing={props.playing} upd={props.upd} case='tracks' data={tracks} />
         </div>
     )
 }
