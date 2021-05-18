@@ -16,9 +16,9 @@ function AlbumHeader(props) {
     const [liked, setLiked] = useState(false);
 
     const checkLiked = () => {
-        if (album && user) {
+        if (props.album && props.user) {
             //console.log(album)
-            setLiked( album.fans.includes(user.id));
+            setLiked( props.album.fans.includes(props.user.id));
         }
     }
 
@@ -91,11 +91,16 @@ function AlbumHeader(props) {
                 <Card.Text style={{'fontSize': '35px'}}>
                     <i>Tracks:</i> {tracks ? tracks.length : 0}
                 </Card.Text>
-                <input type='image'
-                       style={{'height': '50px'}}
-                       src={liked ? liked_icon : like}
-                       onClick={updLike}
-                />
+                <div className='flex-layout'>
+                    <input type='image'
+                        style={{'height': '50px'}}
+                        src={liked ? liked_icon : like}
+                        onClick={updLike}
+                    />
+                    <div style={{'fontSize': '25px', 'marginTop': '5px'}}>
+                        {album ? album.fans.length : 0}
+                    </div>
+                </div>
             </Card.ImgOverlay>
         </Card>
     )

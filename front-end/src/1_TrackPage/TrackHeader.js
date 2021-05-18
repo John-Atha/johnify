@@ -15,9 +15,8 @@ function TrackHeader(props) {
     const [liked, setLiked] = useState(false);
 
     const checkLiked = () => {
-        if (track && user) {
-            //console.log(track)
-            setLiked( track.fans.includes(user.id));
+        if (props.track && props.user) {
+            setLiked( props.track.fans.includes(props.user.id));
         }
     }
 
@@ -68,7 +67,7 @@ function TrackHeader(props) {
 
     return (
         <Card className="bg-dark text-white"
-              style={{'width': '100%', 'height': '300px'}}>
+              style={{'width': '100%', 'height': '340px'}}>
             <Card.Img 
                 style={{'height': 'inherit', 'width': '100%', 'objectFit': 'cover', 'opacity': '50%'}}
                 src={track ? (track.photo_url || track_icon) : track_icon}
@@ -77,16 +76,41 @@ function TrackHeader(props) {
                 <Card.Title style={{'fontSize': '50px'}}>{track ? track.title : null}</Card.Title>
                 <Card.Text style={{'fontSize': '35px'}} className='with-whitespace flex-layout'>
                     <i>Artist: </i> 
-                    <a  href={track ? `/artists/${track.album.artist.id}` : '#'}
+                    <a  href={track ? `/users/${track.album.artist.id}` : '#'}
                         style={{'textDecoration': 'none', 'fontWeight': 'bold', 'color': 'white'}}>
                         {track ? track.album.artist.username : 'Unknown'}
                     </a>
                 </Card.Text>
-                <input type='image'
-                       style={{'height': '50px'}}
-                       src={liked ? liked_icon : like}
-                       onClick={updLike}
-                />
+                <Card.Text style={{'fontSize': '35px'}} className='with-whitespace flex-layout'>
+                    <i>Album: </i> 
+                    <a  href={track ? `/albums/${track.album.id}` : '#'}
+                        style={{'textDecoration': 'none', 'fontWeight': 'bold', 'color': 'white'}}>
+                        {track ? track.album.title : 'Unknown'}
+                    </a>
+                </Card.Text>
+                <Card.Text style={{'fontSize': '35px'}} className='with-whitespace flex-layout'>
+                    {track && track.kinds.length>0 && <i>Kinds: </i>}
+                    {track && track.kinds.map((value, index) => {
+                        return(
+                            <a  className='with-whitespace'
+                                key={index}
+                                href={track ? `/kinds/${value.id}` : '#'}
+                                style={{'textDecoration': 'none', 'fontWeight': 'bold', 'color': 'white'}}>
+                              {`${value.title}${index!==track.kinds.length-1 ? ', ' : ''}`}
+                            </a>
+                        )
+                    })}
+                </Card.Text>
+                <div className='flex-layout'>
+                    <input type='image'
+                        style={{'height': '50px'}}
+                        src={liked ? liked_icon : like}
+                        onClick={updLike}
+                    />
+                    <div style={{'fontSize': '25px', 'marginTop': '5px'}}>
+                        {track ? track.fans.length : 0}
+                    </div>
+                </div>
             </Card.ImgOverlay>
         </Card>
     )
