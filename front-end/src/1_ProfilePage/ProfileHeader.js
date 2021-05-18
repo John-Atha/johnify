@@ -3,9 +3,6 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import Card from 'react-bootstrap/Card';
 import user_icon from '../images/user.png';
-import Error from '../0_MainPages/Error';
-
-import { isLogged, getUser } from '../api/api';
 
 function Profile(props) {
     const [user, setUser] = useState(props.user);

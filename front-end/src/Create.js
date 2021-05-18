@@ -176,7 +176,7 @@ function Create(props) {
                 </form>            
             
             }
-            {!albums.length && what=='track' &&
+            {!albums.length && what==='track' &&
                 <Error message="You need to upload at least one album, so that you can attach your track to it." />
             }
             {err &&

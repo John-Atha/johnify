@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/Button';
 import { isLogged, getUser } from '../api/api';
 
 function ProfileSkeleton(props) {
-    const [id, setId] = useState(props.id);
     const [user, setUser] = useState(null);
     const [myId, setMyId] = useState(null);
 
@@ -26,7 +25,7 @@ function ProfileSkeleton(props) {
     }
 
     const getProfile = () => {
-        getUser(id)
+        getUser(props.id)
         .then(response => {
             setUser(response.data);
         })

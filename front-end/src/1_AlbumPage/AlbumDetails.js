@@ -14,7 +14,6 @@ import { createNotification } from '../createNotification';
 function AlbumDetails(props) {
     const [album, setAlbum] = useState(null);
     const [tracks, setTracks] = useState([]);
-    const [isFav, setIsFav] = useState(false);
     const [user, setUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
@@ -23,16 +22,13 @@ function AlbumDetails(props) {
             isLogged()
             .then(response => {
                 setUser(response.data);
-                setIsFav(album ? album.fans.includes(response.id) : false);
             })
             .catch(err => {
                 setUser(null);
-                setIsFav(false);
             })    
         }
         else {
             setUser(null);
-            setIsFav(false);
         }
     }
 

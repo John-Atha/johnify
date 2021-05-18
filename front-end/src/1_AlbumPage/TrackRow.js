@@ -72,7 +72,8 @@ function TrackRow(props) {
             <td key={props.index+0.2} style={{'width':'50px'}}>{props.index+1}</td>
             <td key={props.index+0.3} style={{'width':'300px'}} className='flex-layout'>
                 <img style={{'height': '40px', 'width': '50px'}}
-                     src={track.photo_url || track_icon} />
+                     src={track.photo_url || track_icon}
+                     alt='track' />
                 <a  style={{'marginLeft': '15px', 'color' : 'white'}}
                     href={`/tracks/${track.id}`}>
                     {track.title}
@@ -82,6 +83,7 @@ function TrackRow(props) {
             <td key={props.index+0.5} style={{'width':'50px'}}>
                 <input type='image' 
                        style={{'height': '40px'}}
+                       alt='like-button'
                        src= {liked ? liked_icon : like}
                        onClick={updLike}
                 />            

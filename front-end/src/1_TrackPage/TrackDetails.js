@@ -12,7 +12,6 @@ import { createNotification } from '../createNotification';
 
 function TrackDetails(props) {
     const [track, setTrack] = useState(null);
-    const [isFav, setIsFav] = useState(false);
     const [user, setUser] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
@@ -21,16 +20,13 @@ function TrackDetails(props) {
             isLogged()
             .then(response => {
                 setUser(response.data);
-                setIsFav(track ? track.fans.includes(response.id) : false);
             })
             .catch(err => {
                 setUser(null);
-                setIsFav(false);
             })    
         }
         else {
             setUser(null);
-            setIsFav(false);
         }
     }
   

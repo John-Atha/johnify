@@ -94,6 +94,7 @@ function AlbumHeader(props) {
                 <div className='flex-layout'>
                     <input type='image'
                         style={{'height': '50px'}}
+                        alt='like-button'
                         src={liked ? liked_icon : like}
                         onClick={updLike}
                     />

@@ -103,6 +103,7 @@ function TrackHeader(props) {
                 </Card.Text>
                 <div className='flex-layout'>
                     <input type='image'
+                        alt='like-button'
                         style={{'height': '50px'}}
                         src={liked ? liked_icon : like}
                         onClick={updLike}
