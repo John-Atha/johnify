@@ -11,6 +11,7 @@ import TrackDetails from '../1_TrackPage/TrackDetails';
 import Search from '../1_SearchPage/Search';
 import ProfileSkeleton from '../1_ProfilePage/ProfileSkeleton';
 import Create from '../Create';
+import KindPage from '../1_KindPage/KindPage';
 
 function Home(props) {
     return(
@@ -29,19 +30,22 @@ function Home(props) {
                     <AllSkeleton case={props.case} />
                 }
                 {props.page==='album' &&
-                    <AlbumDetails id={props.id} />
+                    <AlbumDetails id={parseInt(props.id)} />
                 }
                 {props.page==='track' &&
-                    <TrackDetails id={props.id} />
+                    <TrackDetails id={parseInt(props.id)} />
                 }
                 {props.page==='search' &&
                     <Search />
                 }
                 {props.page==='profile' &&
-                    <ProfileSkeleton id={props.id} />
+                    <ProfileSkeleton id={parseInt(props.id)} />
                 }
                 {props.page==='create' &&
                     <Create />
+                }
+                {props.page==='kind' &&
+                    <KindPage id={parseInt(props.id)} />
                 }
             </div>
         </div>

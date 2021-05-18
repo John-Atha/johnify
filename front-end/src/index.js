@@ -22,15 +22,17 @@ const FindAlbum = () => {
   const { id } = useParams();
   return <Home page='album' id={id} />;
 }
-
 const FindTrack = () => {
   const { id } = useParams();
   return <Home page='track' id={id} />;
 }
-
 const FindProfile = () => {
   const { id } = useParams();
   return <Home page='profile' id={id} />;
+}
+const FindKind = () => {
+  const { id } = useParams();
+  return <Home page='kind' id={id} />;
 }
 
 ReactDOM.render(
@@ -70,6 +72,9 @@ ReactDOM.render(
         </Route>
         <Route path='/create' exact>
           <Home page='create' />
+        </Route>
+        <Route path='/kinds/:id' exact>
+          <FindKind />
         </Route>
       </Switch>
     </BrowserRouter>

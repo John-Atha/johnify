@@ -9,6 +9,7 @@ function MusicPlayer(props) {
     useEffect(() => {
         setPlaying(props.playing)
     }, [props.playing])
+    
     return(
         <div className="music-player flex-layout">
             <div className='flex-layout'

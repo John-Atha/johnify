@@ -179,3 +179,8 @@ export const deleteAlbum = (id) => {
     const requestUrl = `/albums/${id}`;
     return axios.delete(requestUrl, { headers });
 }
+
+export const getOneKind = (id) => {
+    const requestUrl = `/kinds/${id}`;
+    return axios.get(requestUrl);
+}
