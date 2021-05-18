@@ -11,6 +11,7 @@ import AlbumDetails from '../1_AlbumPage/AlbumDetails';
 import TrackDetails from '../1_TrackPage/TrackDetails';
 import Search from '../1_SearchPage/Search';
 import ProfileSkeleton from '../1_ProfilePage/ProfileSkeleton';
+import Create from '../Create';
 
 function Home(props) {
     return(
@@ -18,6 +19,7 @@ function Home(props) {
             
             <div className="main flex-layout">
                 <MyNavbar />
+                
                 {props.page==='famous' &&
                     <FamousSkeleton />                
                 }
@@ -38,6 +40,9 @@ function Home(props) {
                 }
                 {props.page==='profile' &&
                     <ProfileSkeleton id={props.id} />
+                }
+                {props.page==='create' &&
+                    <Create />
                 }
             </div>
 

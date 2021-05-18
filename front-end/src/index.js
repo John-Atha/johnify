@@ -56,17 +56,20 @@ ReactDOM.render(
         <Route path='/albums' exact>
           <Home page='all' case='albums' />
         </Route>
-        <Route path='/albums/:id'>
+        <Route path='/albums/:id' exact>
           <FindAlbum />
         </Route>
-        <Route path='/favs'>
+        <Route path='/favs' exact>
           <Home page='favs' />
         </Route>
-        <Route path='/search'>
+        <Route path='/search' exact>
           <Home page='search' />
         </Route>
-        <Route path='/users/:id'>
+        <Route path='/users/:id' exact>
           <FindProfile />
+        </Route>
+        <Route path='/create' exact>
+          <Home page='create' />
         </Route>
       </Switch>
     </BrowserRouter>

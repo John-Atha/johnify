@@ -31,36 +31,7 @@ function ProfileData(props) {
         })
     }
 
-    if (user.id===myId) {
-        if (user.is_artist) {
-            return (
-                <div>
-                    <div className='flex-layout'>
-                        <Button variant='primary' className='margin' >Add a new album</Button>
-                        <Button variant='primary' className='margin' >Add a new track</Button>
-                    </div>
-                    <div>
-                        <AlbumsOrTracks how='user' case='albums' id={user.id} />
-                        <AlbumsOrTracks how='user' case='tracks' id={user.id} />
-                    </div>
-                </div>
-            )    
-        }
-        else {
-            return (
-                <div>
-                    <Error message='You have to be an artist to upload albums and songs' />
-                    <Button className='margin-top'
-                            variant='success'
-                            onClick={transformToArtist} >
-                        Transform to artist account
-                    </Button>
-                </div>
-            )
-        }
-    }
 
-    else {
         if (user.is_artist) {
             return (
                 <div>
@@ -70,13 +41,27 @@ function ProfileData(props) {
             )    
         }
         else {
-            return (
-                <div>
-                    <Error message='User is not an artist.' />
-                </div>
-            )
+            if (user.id===myId) {
+                return (
+                    <div>
+                        <Error message='You have to be an artist to upload albums and songs' />
+                        <Button className='margin-top'
+                                variant='success'
+                                onClick={transformToArtist} >
+                            Transform to artist account
+                        </Button>
+                    </div>
+                )
+            }
+            else {
+                return (
+                    <div>
+                        <Error message='User is not an artist.' />
+                    </div>
+                )    
+            }
         }
-    }
+
 }
 
 export default ProfileData;

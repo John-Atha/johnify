@@ -6,7 +6,7 @@ import album from '../images/album.png'
 
 function Album(props) {
     return(
-        <div className='one-album-container flex-layout' onClick={()=>{window.location.href=`/albums/${props.album.id}`}}>
+        <div className='one-album-container flex-layout' onClick={()=>{ if (!props.blockRedirect) window.location.href=`/albums/${props.album.id}`}}>
             <img src={props.album.photo_url || album}
                  style={{'height': !props.album.photo_url ? '90px': '100px', 'marginTop': !props.album.photo_url ? '5px': '0px', 'borderRadius': '5px'}}/>
             <div style={{'marginLeft': '5px', 'padding': '5px'}}>

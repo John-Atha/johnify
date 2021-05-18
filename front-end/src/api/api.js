@@ -138,3 +138,37 @@ export const userMakeArtist = (id) => {
     const requestUrl = `/users/${id}`;
     return axios.put(requestUrl, params, { headers });
 }
+
+export const createAlbum = (title, photo) => {
+    const headers = buildAuthHeader();
+    const params = new FormData();
+    params.append('title', title);
+    if (photo) params.append('photo', photo);
+    const requestUrl = '/albums'
+    return axios.post(requestUrl, params, { headers });
+}
+
+export const createTrack = (title, photo, file, album) => {
+    const headers = buildAuthHeader();
+    const params = new FormData();
+    params.append('title', title);
+    params.append('album', album);
+    if (photo) params.append('photo', photo);
+    if (album) params.append('file', file);
+    const requestUrl = '/tracks'
+    return axios.post(requestUrl, params, { headers });
+}
+
+export const addTrackKinds = (track, kinds) => {
+    const headers = buildAuthHeader();
+    const requestUrl = `tracks/${track}/kinds`;
+    const body = kinds;
+    return axios.post(requestUrl, body, { headers });
+}
+
+export const deleteTrackKinds = (track, kind) => {
+    const headers = buildAuthHeader();
+    const requestUrl = `tracks/${track}/kinds/${kind}`;
+    return axios.delete(requestUrl, { headers });
+
+}

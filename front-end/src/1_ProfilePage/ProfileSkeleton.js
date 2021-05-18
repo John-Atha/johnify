@@ -4,6 +4,7 @@ import './styles.css';
 import Error from '../0_MainPages/Error';
 import ProfileHeader from './ProfileHeader';
 import ProfileData from './ProfileData';
+import Button from 'react-bootstrap/Button';
 
 import { isLogged, getUser } from '../api/api';
 
@@ -44,6 +45,13 @@ function ProfileSkeleton(props) {
         return(
             <div className='famous-skeleton'>
                 <ProfileHeader user={user} myId={myId} />
+                {user.id===myId && user.is_artist &&
+                    <div>
+                        <h4>Feeling creative?</h4>
+                        <Button variant='success' className='margin'>Upload a new album</Button>
+                        <Button variant='success' className='margin'>Upload a new track</Button>
+                    </div>
+                }
                 <ProfileData user={user} myId={myId} />
             </div>
         )    
