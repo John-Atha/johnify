@@ -113,3 +113,8 @@ export const getKindTracks = (id, start, end) => {
     const requestUrl = `/kinds/${id}/tracks`;
     return axios.get(requestUrl, { params });
 }
+
+export const getUser = (id) => {
+    const requestUrl = `/users/${id}`;
+    return axios.get(requestUrl);
+}

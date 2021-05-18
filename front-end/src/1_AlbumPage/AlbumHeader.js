@@ -83,7 +83,7 @@ function AlbumHeader(props) {
                 <Card.Title style={{'fontSize': '50px'}}>{album ? album.title : null}</Card.Title>
                 <Card.Text style={{'fontSize': '35px'}} className='with-whitespace flex-layout'>
                     <i>Artist: </i> 
-                    <a  href={album ? `/artists/${album.artist.id}` : '#'}
+                    <a  href={album ? `/users/${album.artist.id}` : '#'}
                         style={{'textDecoration': 'none', 'fontWeight': 'bold', 'color': 'white'}}>
                         {album ? album.artist.username : 'Unknown'}
                     </a>
@@ -96,7 +96,6 @@ function AlbumHeader(props) {
                        src={liked ? liked_icon : like}
                        onClick={updLike}
                 />
-
             </Card.ImgOverlay>
         </Card>
     )

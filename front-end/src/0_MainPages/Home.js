@@ -10,6 +10,7 @@ import AllSkeleton from '../2_CategorySkeleton/AllSkeleton';
 import AlbumDetails from '../1_AlbumPage/AlbumDetails';
 import TrackDetails from '../1_TrackPage/TrackDetails';
 import Search from '../1_SearchPage/Search';
+import Profile from '../1_ProfilePage/Profile';
 
 function Home(props) {
     return(
@@ -34,6 +35,9 @@ function Home(props) {
                 }
                 {props.page==='search' &&
                     <Search />
+                }
+                {props.page==='profile' &&
+                    <Profile id={props.id} />
                 }
             </div>
 

@@ -28,13 +28,18 @@ const FindTrack = () => {
   return <Home page='track' id={id} />;
 }
 
+const FindProfile = () => {
+  const { id } = useParams();
+  return <Home page='profile' id={id} />;
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <ReactNotifications />
     <BrowserRouter>
       <Switch>
         <Route path='/' exact>
-          <Home />
+          <Home page='famous' />
         </Route>
         <Route path='/login' exact>
           <LoginSkeleton case='login' />
@@ -59,6 +64,9 @@ ReactDOM.render(
         </Route>
         <Route path='/search'>
           <Home page='search' />
+        </Route>
+        <Route path='/users/:id'>
+          <FindProfile />
         </Route>
       </Switch>
     </BrowserRouter>
