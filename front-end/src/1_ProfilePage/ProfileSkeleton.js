@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 import './styles.css';
-import Card from 'react-bootstrap/Card';
-import user_icon from '../images/user.png';
 import Error from '../0_MainPages/Error';
+import ProfileHeader from './ProfileHeader';
+import ProfileData from './ProfileData';
 
 import { isLogged, getUser } from '../api/api';
 
-function Profile(props) {
+function ProfileSkeleton(props) {
     const [id, setId] = useState(props.id);
     const [user, setUser] = useState(null);
     const [myId, setMyId] = useState(null);
@@ -43,20 +43,8 @@ function Profile(props) {
     if (user) {
         return(
             <div className='famous-skeleton'>
-                <Card className="bg-dark text-white"
-                    style={{'width': '100%', 'height': '300px'}}>
-                    <Card.Img 
-                        style={{'height': 'inherit', 'width': '100%', 'objectFit': 'cover', 'opacity': '50%'}}
-                        src={user ? (user.photo_url || user_icon) : user_icon}
-                        alt="User" />
-                    <Card.ImgOverlay>
-                        <Card.Title style={{'fontSize': '50px'}}>{user ? user.username : null}</Card.Title>
-                        <Card.Text style={{'fontSize': '35px'}} className='with-whitespace flex-layout'>
-                            <i>Artist: </i> 
-                            <i>{user.is_artist ? 'Yes' : 'No'}</i>
-                        </Card.Text>
-                    </Card.ImgOverlay>
-                </Card>
+                <ProfileHeader user={user} myId={myId} />
+                <ProfileData user={user} myId={myId} />
             </div>
         )    
     }
@@ -67,4 +55,4 @@ function Profile(props) {
     }
 }
 
-export default Profile;
+export default ProfileSkeleton;

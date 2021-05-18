@@ -35,13 +35,13 @@ export const isLogged = () => {
     return axios.get(requestUrl, {headers});
 }
 
-export const getAlbumsRanking = (start, end) => {
+export const getAlbumsRanking = (dummy='', start, end) => {
     const params = { start, end};
     const requestUrl = '/albums/ranking';
     return axios.get(requestUrl, { params });
 }
 
-export const getTracksRanking = (start, end) => {
+export const getTracksRanking = (dummy='', start, end) => {
     const params = { start, end};
     const requestUrl = '/tracks/ranking';
     return axios.get(requestUrl, { params });
@@ -72,7 +72,7 @@ export const removeFavAlbum = (userId, id) => {
 export const addFavAlbum = (userId, id) => {
     const headers = buildAuthHeader();
     const requestUrl = `/users/${userId}/albums/fav`;
-    var params = new FormData();
+    const params = new FormData();
     params.append('album', id);
     return axios.post(requestUrl, params, { headers });
 }
@@ -86,7 +86,7 @@ export const removeFavTrack = (userId, id) => {
 export const addFavTrack = (userId, id) => {
     const headers = buildAuthHeader();
     const requestUrl = `/users/${userId}/tracks/fav`;
-    var params = new FormData();
+    const params = new FormData();
     params.append('track', id);
     return axios.post(requestUrl, params, { headers });
 }
@@ -117,4 +117,24 @@ export const getKindTracks = (id, start, end) => {
 export const getUser = (id) => {
     const requestUrl = `/users/${id}`;
     return axios.get(requestUrl);
+}
+
+export const getUserTracks = (id, start, end) => {
+    const params = { start, end };
+    const requestUrl = `/users/${id}/tracks`;
+    return axios.get(requestUrl, { params });
+}
+
+export const getUserAlbums = (id, start, end) => {
+    const params = { start, end };
+    const requestUrl = `/users/${id}/albums`;
+    return axios.get(requestUrl, { params });
+}
+
+export const userMakeArtist = (id) => {
+    const headers = buildAuthHeader();
+    const params = new FormData();
+    params.append('is_artist', true);
+    const requestUrl = `/users/${id}`;
+    return axios.put(requestUrl, params, { headers });
 }

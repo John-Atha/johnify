@@ -7,7 +7,7 @@ import Track from './Track';
 import Error from '../0_MainPages/Error';
 import Button from 'react-bootstrap/Button';
 
-import { getAlbumsRanking, getTracksRanking, getFavAlbums, getFavTracks } from '../api/api';
+import { getAlbumsRanking, getTracksRanking, getFavAlbums, getFavTracks, getUserTracks, getUserAlbums } from '../api/api';
 
 function AlbumsOrTracks(props) {
     const [userId, setUserId] = useState(props.userId);
@@ -18,14 +18,21 @@ function AlbumsOrTracks(props) {
 
     const getData = () => {
         let func = getAlbumsRanking;
-        if (props.how!=='favs') {
+        let id = null;
+        if (props.how === 'user') {
+            id = props.id;
+            if (props.case==='tracks') func = getUserTracks;
+            else func = getUserAlbums;
+        }
+        else if (props.how!=='favs') {
             if (props.case==='tracks') func = getTracksRanking;
         }
         if (props.how==='favs') {
+            id = props.userId;
             if (props.case==='tracks') func = getFavTracks;
             else func = getFavAlbums;
         }
-        func(start, end)
+        func(id, start, end)
         .then(response => {
             console.log(response);
             setData(data.concat(response.data));
@@ -37,7 +44,7 @@ function AlbumsOrTracks(props) {
     }
 
     useEffect(() => {
-        getData();
+        setTimeout(()=>{getData();}, 200);
     }, [start, end])
 
     useEffect(() => {
@@ -46,7 +53,7 @@ function AlbumsOrTracks(props) {
 
     return(
         <div>
-            <h2 className='margin-top-small'>{props.how==='all' ? 'All' : (props.how==='favs' ? 'Your favourite' : 'Top 5')} {props.case.charAt(0).toUpperCase()+props.case.slice(1)}</h2>
+            <h2 className='margin-top-small'>{ props.how==='user' ? '' : (props.how==='all' ? 'All' : (props.how==='favs' ? 'Your favourite' : 'Top 5'))} {props.case.charAt(0).toUpperCase()+props.case.slice(1)}</h2>
             <div className='albums-container flex-layout'>
                 {props.case==='albums' && data.map((value, index) => {
                     return(
@@ -59,7 +66,7 @@ function AlbumsOrTracks(props) {
                     )
                 })}
             </div>
-            {!noData && props.how==='all' &&
+            {!noData && (props.how==='all' || props.how==='user') &&
                 <Button variant='primary' style={{'marginLeft': '15px'}}
                         onClick={()=>{setStart(start+5);setEnd(end+5)}}>
                     See more

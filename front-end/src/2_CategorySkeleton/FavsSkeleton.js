@@ -5,6 +5,7 @@ import '../generalStyles.css';
 import AlbumsOrTracks from '../3_OneCategory/AlbumsOrTracks';
 
 import { isLogged } from '../api/api';
+import Error from '../0_MainPages/Error';
 
 function FavsSkeleton() {
     const [userId, setUserId] = useState(null)
@@ -19,12 +20,19 @@ function FavsSkeleton() {
             })    
         }
     }, [])
-    return(
-        <div className='famous-skeleton'>
-            <AlbumsOrTracks case='albums' how='favs' userId={userId} />
-            <AlbumsOrTracks case='tracks' how='favs' userId={userId} />
-        </div>
-    )
+    if (userId) {
+        return(
+            <div className='famous-skeleton'>
+                <AlbumsOrTracks case='albums' how='favs' userId={userId} />
+                <AlbumsOrTracks case='tracks' how='favs' userId={userId} />
+            </div>
+        )    
+    }
+    else {
+        return(
+            <Error message='You cannot have a favourites list without an account' />
+        )
+    }
 }
 
 export default FavsSkeleton;
