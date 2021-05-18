@@ -71,19 +71,25 @@ class Users(APIView):
                 'username': request.POST['username'],
                 'email': request.POST['email'],
             }
+            print(request.POST['username'])
+            print(request.POST['email'])
             if request.POST['password']==request.POST['confirmation']:
                 if 'photo' in request.FILES:
                     mime_type = get_mime_type(request.FILES['photo'])
                     if 'image' not in mime_type:
                         return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
                     data['photo'] = request.FILES['photo']
-                user = User.objects.create_user(username='dummy', password=request.POST['password'])
-                user = UserSerializer(user, data=data, context={"request": request})
-                if user.is_valid():
+                user = User.objects.create_user(username=request.POST['username'],
+                                                password=request.POST['password'],
+                                                email=request.POST['email']
+                                            )
+                #user = UserSerializer(user, data=data, context={"request": request})
+                #if user.is_valid():
+                try:
                     user.save()
-                    return Response(user.data, status.HTTP_200_OK)
-                else:
-                    return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+                    return Response(action.data, status.HTTP_200_OK)
+                except Exception:
+                    return Response('Invalid credentials.', status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response("Passwords don't match", status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -159,6 +165,8 @@ class Albums(APIView):
             if not user.is_artist:
                 return Response("Only artists can create albums.", status=status.HTTP_400_BAD_REQUEST)
             else:
+                #print(request.POST)
+                #print(request.FILES)
                 if 'title' in request.POST:
                     title = request.POST['title']
                     try:
@@ -174,6 +182,9 @@ class Albums(APIView):
                             if 'image' not in mime_type:
                                 return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
                             data['photo'] = request.FILES['photo']
+                            #print('PHOTO CAME:')
+                            #print(request.FILES['photo'])
+                            album.photo=request.FILES['photo']
                         album = AlbumSerializer(album, data=data, context={"request": request})
                         if album.is_valid():
                             album.save()
@@ -274,8 +285,16 @@ class Tracks(APIView):
                     'file': request.FILES['file'],
                     'album': AlbumSerializer(album, context={"request": request}).data,
                     'title': request.POST['title'],
-                }
+                }   
                 track = Track(album = album)
+                if 'photo' in request.FILES:
+                    mime_type = get_mime_type(request.FILES['photo'])
+                    if 'image' not in mime_type:
+                        return Response('Invalid image file.', status=status.HTTP_400_BAD_REQUEST)
+                    data['photo'] = request.FILES['photo']
+                    #print('PHOTO CAME:')
+                    #print(request.FILES['photo'])
+                    track.photo=request.FILES['photo']
                 track = TrackSerializer(track, data=data, context={"request": request}, partial=True)
                 if track.is_valid():
                     track.save()
@@ -430,30 +449,33 @@ class UserFavAlbums(APIView):
                 if album not in user.fav_albums.all():
                     user.fav_albums.add(album)
                     user.save()
-                res = [album.id for album in user.fav_albums.all()]
-                return Response({'albums': res}, status=status.HTTP_200_OK)
+                res = [fan.id for fan in album.fans.all()]
+                return Response({'fans': res}, status=status.HTTP_200_OK)
             else:
                 return Response("Album id not given.", status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
-    
-    def delete(self, request, id):
+
+class UserFavAlbumDel(APIView):
+
+    permission_classes = [permissions.AllowAny]
+    def delete(self, request, id, album_id):
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
             return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         if user == request.user:
-            if 'album' in request.POST:
-                try:
-                    album = Album.objects.get(id=request.POST['album'])
-                except Album.DoesNotExist:
-                    return Response(f"Album '{request.POST['album']}' not found.", status=status.HTTP_400_BAD_REQUEST)
-                if album in user.fav_albums.all():
-                    user.fav_albums.remove(album)
-                    user.save()
-                res = { 'albums': [album.id for album in user.fav_albums.all()]}
-                return Response(res, status=status.HTTP_200_OK)
+            try:
+                album = Album.objects.get(id=album_id)
+            except Album.DoesNotExist:
+                return Response(f"Album '{album_id}' not found.", status=status.HTTP_400_BAD_REQUEST)
+            if album in user.fav_albums.all():
+                user.fav_albums.remove(album)
+                user.save()
+            res = { 'fans': [fan.id for fan in album.fans.all()]}
+            return Response(res, status=status.HTTP_200_OK)
         else:
+            print(request.user)
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)    
 
 class UserFavTracks(APIView):
@@ -487,32 +509,32 @@ class UserFavTracks(APIView):
                 if track not in user.fav_tracks.all():
                     user.fav_tracks.add(track)
                     user.save()
-                res = [track.id for track in user.fav_tracks.all()]
-                return Response({'tracks': res}, status=status.HTTP_200_OK)
+                res = [fan.id for fan in track.fans.all()]
+                return Response({'fans': res}, status=status.HTTP_200_OK)
             else:
                 return Response("Track id not given.", status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
 
+class UserFavTrackDel(APIView):
+    permission_classes = [permissions.AllowAny]
+
     # expects track id
-    def delete(self, request, id):
+    def delete(self, request, id, track_id):
         try:
             user = User.objects.get(id=id)
         except User.DoesNotExist:
             return Response(f"User '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         if user == request.user:
-            if 'track' in request.POST:
-                try:
-                    track = Track.objects.get(id=request.POST['track'])
-                except Track.DoesNotExist:
-                    return Response(f"Track '{request.POST['track']}' not found.", status=status.HTTP_400_BAD_REQUEST)
-                if track in user.fav_tracks.all():
-                    user.fav_tracks.remove(track)
-                    user.save()
-                res = [track.id for track in user.fav_tracks.all()]
-                return Response({'tracks': res}, status=status.HTTP_200_OK)
-            else:
-                return Response("Track id not given.", status=status.HTTP_400_BAD_REQUEST)
+            try:
+                track = Track.objects.get(id=track_id)
+            except Track.DoesNotExist:
+                return Response(f"Track '{track_id}' not found.", status=status.HTTP_400_BAD_REQUEST)
+            if track in user.fav_tracks.all():
+                user.fav_tracks.remove(track)
+                user.save()
+            res = [fan.id for fan in track.fans.all()]
+            return Response({'fans': res}, status=status.HTTP_200_OK)
         else:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
 
@@ -626,6 +648,9 @@ class TrackKinds(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, id):
+        
+        #print(request.POST, end='\n\n\n\n')
+        
         try:
             track = Track.objects.get(id=id)
         except Track.DoesNotExist:
@@ -634,33 +659,34 @@ class TrackKinds(APIView):
             if request.body:
                 body = json.loads(request.body)
                 kinds_ids = body['kinds']
-                for kind_id in kinds_ids:
-                    try:
-                        kind = Kind.objects.get(id=kind_id)
-                    except Kind.DoesNotExist:
-                        pass
-                    track.kinds.add(kind)
+                if kinds_ids:
+                    for kind_id in kinds_ids:
+                        try:
+                            kind = Kind.objects.get(id=kind_id)
+                            track.kinds.add(kind)
+                        except Kind.DoesNotExist:
+                            pass
                 track.save()
                 return Response(TrackSerializer(track, context={"request": request}).data, status=status.HTTP_200_OK)
             else:
                 return Response("Empty body.", status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
-    
-    def delete(self, request, id):
+
+class TrackKindsDelete(APIView):
+    def delete(self, request, id, kind_id):
         try:
             track = Track.objects.get(id=id)
         except Track.DoesNotExist:
             return Response(f"Track '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
         if request.user == track.album.artist:
-            if 'kind' in request.POST:
-                try:
-                    kind = Kind.objects.get(id=request.POST['kind'])
-                except Kind.DoesNotExist:
-                    return Response(f"Kind '{id}' not found.", status=status.HTTP_404_NOT_FOUND)
-                if kind in track.kinds.all():
-                    track.kinds.remove(kind)
-                    track.save()
+            try:
+                kind = Kind.objects.get(id=kind_id)
+            except Kind.DoesNotExist:
+                return Response(f"Kind '{kind_id}' not found.", status=status.HTTP_404_NOT_FOUND)
+            if kind in track.kinds.all():
+                track.kinds.remove(kind)
+                track.save()
             return Response([KindSerializer(kind).data for kind in track.kinds.all()], status=status.HTTP_200_OK)
         else:
             return Response("Unauthorized", status=status.HTTP_401_UNAUTHORIZED)
