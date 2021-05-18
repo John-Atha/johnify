@@ -102,3 +102,14 @@ export const getFavTracks = (userId, start, end) => {
     const params = { start, end };
     return axios.get(requestUrl, { params });
 }
+
+export const getKinds = () => {
+    const requestUrl = '/kinds';
+    return axios.get(requestUrl);
+}
+
+export const getKindTracks = (id, start, end) => {
+    const params = { start, end };
+    const requestUrl = `/kinds/${id}/tracks`;
+    return axios.get(requestUrl, { params });
+}
