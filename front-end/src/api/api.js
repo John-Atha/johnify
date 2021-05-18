@@ -52,6 +52,11 @@ export const getAlbum = (id) => {
     return axios.get(requestUrl);
 }
 
+export const getTrack = (id) => {
+    const requestUrl = `/tracks/${id}`;
+    return axios.get(requestUrl);
+}
+
 export const getAlbumTracks = (id, start=1, end=1000) => {
     const params = { start, end };
     const requestUrl = `/albums/${id}/tracks`;

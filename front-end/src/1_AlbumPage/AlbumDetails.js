@@ -64,10 +64,13 @@ function AlbumDetails(props) {
     return(
         <div className="famous-skeleton">
             <AlbumHeader album={album} tracks={tracks} user={user} />
-            {tracks.length!==0 &&
+            {!album &&
+                <Error message='Oops, album not found...' />
+            }
+            {album!==null && tracks.length!==0 &&
                 <AlbumTracks tracks = {tracks} user={user} />            
             }
-            {!tracks.length &&
+            {album!==null && !tracks.length &&
                 <Error message='Oops, no tracks found here...' />
             }
         </div>

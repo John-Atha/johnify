@@ -14,10 +14,16 @@ import AlbumPage from './1_AlbumPage/AlbumPage';
 import AllPage from './0_MainPages/AllPage';
 import FavsPage from './0_MainPages/FavsPage';
 import LoginSkeleton from './0_LoginRegister/LoginSkeleton';
+import TrackPage from './1_TrackPage/TrackPage';
 
 const FindAlbum = () => {
-  const {id} = useParams();
-  return <AlbumPage id={id} />
+  const { id } = useParams();
+  return <AlbumPage id={id} />;
+}
+
+const FindTrack = () => {
+  const { id } = useParams();
+  return <TrackPage id={id} />;
 }
 
 ReactDOM.render(
@@ -36,6 +42,9 @@ ReactDOM.render(
         </Route>
         <Route path='/tracks' exact>
           <AllPage case='tracks' />
+        </Route>
+        <Route path='/tracks/:id' exact>
+          <FindTrack />
         </Route>
         <Route path='/albums' exact>
           <AllPage case='albums' />

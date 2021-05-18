@@ -6,7 +6,9 @@ import track from '../images/track.png';
 
 function Track(props) {
     return(
-        <div className='one-album-container flex-layout' onClick={()=>{window.location.href=`/tracks/${props.track.id}`}} style={{ 'padding': !props.track.photo_url ? '5px' : '0px'}}>
+        <div className='one-album-container flex-layout'
+             onClick={()=>{window.location.href=`/tracks/${props.track.id}`}}
+             style={{ 'padding': !props.track.photo_url ? '5px' : '0px'}}>
             <img src={props.track.photo_url || track}
                  style={{'height': !props.track.photo_url ? '90px': '100px', 'marginTop': !props.track.photo_url ? '5px': '0px', 'borderRadius': '5px'}}/>
             <div style={{'marginLeft': '5px', 'padding': '5px'}}>
