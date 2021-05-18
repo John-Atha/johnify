@@ -10,6 +10,7 @@ import track from '../images/track.png';
 import fav from '../images/fav.png';
 import user_icon from '../images/user.png';
 import logout_icon from '../images/logout.png';
+import search from '../images/search.png';
 
 import { createNotification } from '../createNotification';
 
@@ -68,6 +69,7 @@ function MyNavbar() {
             <MyNavLink name='Albums' dest='/albums' icon={album} user={user} />
             <MyNavLink name='Tracks' dest='/tracks' icon={track} user={user} />
             <MyNavLink name='Favourites' dest='/favs' icon={fav} user={user} />
+            <MyNavLink name='Search' dest='/search' icon={search} user={user} />
             <MyNavLink case='user' name={user ? user.username: `Log in`} dest={user ? `/users/${user.id}`: '/login'} icon={user_icon}  user={user}/>
             {user &&
                 <MyNavLink name='Logout' icon={logout_icon} />

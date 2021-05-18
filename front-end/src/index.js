@@ -10,20 +10,22 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 
 import Home from './0_MainPages/Home';
+/*
 import AlbumPage from './1_AlbumPage/AlbumPage';
 import AllPage from './0_MainPages/AllPage';
 import FavsPage from './0_MainPages/FavsPage';
-import LoginSkeleton from './0_LoginRegister/LoginSkeleton';
 import TrackPage from './1_TrackPage/TrackPage';
+*/
+import LoginSkeleton from './0_LoginRegister/LoginSkeleton';
 
 const FindAlbum = () => {
   const { id } = useParams();
-  return <AlbumPage id={id} />;
+  return <Home page='album' id={id} />;
 }
 
 const FindTrack = () => {
   const { id } = useParams();
-  return <TrackPage id={id} />;
+  return <Home page='track' id={id} />;
 }
 
 ReactDOM.render(
@@ -41,19 +43,22 @@ ReactDOM.render(
           <LoginSkeleton case='register' />
         </Route>
         <Route path='/tracks' exact>
-          <AllPage case='tracks' />
+          <Home page='all' case='tracks' />
         </Route>
         <Route path='/tracks/:id' exact>
           <FindTrack />
         </Route>
         <Route path='/albums' exact>
-          <AllPage case='albums' />
+          <Home page='all' case='albums' />
         </Route>
         <Route path='/albums/:id'>
           <FindAlbum />
         </Route>
         <Route path='/favs'>
-          <FavsPage />
+          <Home page='favs' />
+        </Route>
+        <Route path='/search'>
+          <Home page='search' />
         </Route>
       </Switch>
     </BrowserRouter>
