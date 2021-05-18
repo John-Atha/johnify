@@ -168,8 +168,14 @@ export const addTrackKinds = (track, kinds) => {
     return axios.post(requestUrl, body, { headers });
 }
 
-export const deleteTrackKinds = (track, kind) => {
+export const deleteTrack = (id) => {
     const headers = buildAuthHeader();
-    const requestUrl = `tracks/${track}/kinds/${kind}`;
+    const requestUrl = `/tracks/${id}`;
+    return axios.delete(requestUrl, { headers });
+}
+
+export const deleteAlbum = (id) => {
+    const headers = buildAuthHeader();
+    const requestUrl = `/albums/${id}`;
     return axios.delete(requestUrl, { headers });
 }

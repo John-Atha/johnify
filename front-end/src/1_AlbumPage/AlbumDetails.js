@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 import './styles.css';
 import AlbumHeader from './AlbumHeader';
 import AlbumTracks from './AlbumTracks';
-
-import { getAlbum, isLogged, getAlbumTracks } from '../api/api';
 import Error from '../0_MainPages/Error';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+import { getAlbum, isLogged, getAlbumTracks, deleteAlbum } from '../api/api';
+import { createNotification } from '../createNotification';
 
 
 function AlbumDetails(props) {
@@ -13,6 +16,7 @@ function AlbumDetails(props) {
     const [tracks, setTracks] = useState([]);
     const [isFav, setIsFav] = useState(false);
     const [user, setUser] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const checkLogged = () => {
         if (localStorage.getItem('token')) {
@@ -30,6 +34,18 @@ function AlbumDetails(props) {
             setUser(null);
             setIsFav(false);
         }
+    }
+
+    const deleteA = () => {
+        deleteAlbum(album.id)
+        .then(response => {
+            createNotification('success', 'OK', 'Album deleted successfully.');
+            setTimeout(()=>{window.location.href='/'}, 500);
+        })
+        .catch(err => {
+            createNotification('danger', 'Sorry', 'We could not delete your album');
+            setTimeout(()=>{window.location.href='/'}, 500);
+        })
     }
 
     const getAlbumTracksData = () => {
@@ -66,6 +82,33 @@ function AlbumDetails(props) {
             <AlbumHeader album={album} tracks={tracks} user={user} />
             {!album &&
                 <Error message='Oops, album not found...' />
+            }
+            {album && user && album.artist.id===user.id &&
+                <Button variant='danger'
+                        className='margin'
+                        onClick={()=>{setShowModal(true)}}>
+                    Delete Album
+                </Button>
+            }
+            {showModal &&
+                <Modal.Dialog style={{'color': 'black', 'position': 'absolute', 'top': '100px'}}>
+                    <Modal.Header>
+                        <Modal.Title>Are you sure you want to delete your album?</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>All of its tracks will be lost.</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary"
+                                onClick={()=>setShowModal(false)}>
+                            No, I changed my mind.
+                        </Button>
+                        <Button variant="primary"
+                                onClick={()=>{deleteA()}}>
+                            Yes, delete it.
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
             }
             {album!==null && tracks.length!==0 &&
                 <AlbumTracks tracks = {tracks} user={user} />            

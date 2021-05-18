@@ -46,10 +46,9 @@ function ProfileSkeleton(props) {
             <div className='famous-skeleton'>
                 <ProfileHeader user={user} myId={myId} />
                 {user.id===myId && user.is_artist &&
-                    <div>
+                    <div className='margin-top'>
                         <h4>Feeling creative?</h4>
-                        <Button variant='success' className='margin'>Upload a new album</Button>
-                        <Button variant='success' className='margin'>Upload a new track</Button>
+                        <Button variant='success' className='margin' onClick={()=>{window.location.href='/create'}}>Upload your art</Button>
                     </div>
                 }
                 <ProfileData user={user} myId={myId} />

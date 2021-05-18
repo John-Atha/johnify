@@ -95,7 +95,7 @@ function Register() {
             <form onSubmit={submit} className='margin-top-small'>
                 <input className='log-input' type='text' value={username} placeholder='Username...' onChange={updUsername} />
                 <div className='break' />
-                <input className='log-input margin-top-smaller' type='text' value={email} placeholder='Email...' onChange={(event) => {setEmail(event.target.value)}} />
+                <input className='log-input margin-top-smaller' type='text' value={email} placeholder='Email...' onChange={(event) => {setEmail(event.target.value); setErr(null)}} />
                 <input  className='log-input margin-top-smaller'
                         type='password'
                         name='password'
