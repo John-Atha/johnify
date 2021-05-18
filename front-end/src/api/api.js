@@ -163,6 +163,8 @@ export const addTrackKinds = (track, kinds) => {
     const headers = buildAuthHeader();
     const requestUrl = `tracks/${track}/kinds`;
     const body = kinds;
+    console.log('body');
+    console.log(body);
     return axios.post(requestUrl, body, { headers });
 }
 
@@ -170,5 +172,4 @@ export const deleteTrackKinds = (track, kind) => {
     const headers = buildAuthHeader();
     const requestUrl = `tracks/${track}/kinds/${kind}`;
     return axios.delete(requestUrl, { headers });
-
 }

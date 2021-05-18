@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Error from './0_MainPages/Error';
 import Album from './3_OneCategory/Album';
 
-import { isLogged, createAlbum, createTrack, getUserAlbums } from './api/api';
+import { isLogged, createAlbum, createTrack, getUserAlbums, getKinds, addTrackKinds } from './api/api';
 import { createNotification } from './createNotification';
 
 function Create(props) {
@@ -14,6 +14,8 @@ function Create(props) {
     const [err, setErr] = useState(false);
     const [albums, setAlbums] = useState([]);
     const [chosenAlbum, setChosenAlbum] = useState(null);
+    const [kinds, setKinds] = useState([]);
+    const [currKind, setCurrKind] = useState(null);
 
     const checkLogged = () => {
         isLogged()
@@ -41,9 +43,19 @@ function Create(props) {
         })
     }
 
+    const getAllKinds = () => {
+        getKinds()
+        .then(response => {
+            console.log(response);
+            setKinds(response.data);
+            setCurrKind(response.data.length>0 ? response.data[0].id : null);
+        })
+    }
+
 
     useEffect(() => {
         checkLogged();
+        getAllKinds();
     }, [])
 
     const submit = (event) => {
@@ -52,9 +64,12 @@ function Create(props) {
             const input = document.getElementById('album-photo');
             let img = null;
             if (input.files.length) img=input.files[0];
+            console.log(title);
+            console.log(img);
             createAlbum(title, img)
             .then(response => {
                 createNotification('success', 'Congratulations!', 'Your album has just been uploaded!');
+                setTimeout(()=>{window.location.href=`/albums/${response.data.id}`}, 500);
             })
             .catch(err => {
                 console.log(err);
@@ -68,14 +83,35 @@ function Create(props) {
             let audio = null;
             if (input1.files.length) img=input1.files[0];
             if (input2.files.length) audio=input2.files[0];
+            console.log(title);
+            console.log(img);
+            console.log(audio);
+            console.log(chosenAlbum);
             createTrack(title, img, audio, chosenAlbum)
             .then(response => {
-                createNotification('success', 'Congratulations!', 'Your album has just been uploaded!');
-                setTimeout(()=>{window.location.href=`/tracks/${response.data.id}`}, 500);
+                if (currKind) {
+                    addTrackKinds(response.data.id, {kinds:[parseInt(currKind)]})
+                    .then(response => {
+                        console.log(response);
+                        createNotification('success', 'Congratulations!', 'Your track has just been uploaded!');
+                        setTimeout(()=>{window.location.href=`/tracks/${response.data.id}`}, 500);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        createNotification('success', 'Congratulations!', 'Your track has just been uploaded!');
+                        setTimeout(()=>{window.location.href=`/tracks/${response.data.id}`}, 500);    
+                    })                    
+                }
+                else {
+                    console.log('no kinds')
+                    createNotification('success', 'Congratulations!', 'Your track has just been uploaded!');
+                    setTimeout(()=>{window.location.href=`/tracks/${response.data.id}`}, 500);    
+                }
             })
             .catch(err => {
                 console.log(err);
-                createNotification('danger', 'Sorry,', 'We could not upload your album.');
+                if (err.response.status===400)
+                createNotification('danger', 'Sorry,', err.response.data);
             })
         }
     }
@@ -85,8 +121,8 @@ function Create(props) {
             <h3 className='margin-top'>Hello, {user ? user.username : ''}<br></br> Feel free to share your art with us!</h3>
             {!err &&
                 <div>
-                    <Button variant='primary' className='margin' onClick={()=>{setWhat('album')}}>Add an album</Button>
-                    <Button variant='primary' className='margin' onClick={()=>{setWhat('track')}}>Add a track</Button>
+                    <Button variant={ what==='album' ? 'success' : 'primary'} className='margin' onClick={()=>{setWhat('album')}}>Add an album</Button>
+                    <Button variant={ what==='track' ? 'success' : 'primary'} className='margin' onClick={()=>{setWhat('track')}}>Add a track</Button>
                 </div>
             }
             {!err && what==='album' &&
@@ -113,7 +149,7 @@ function Create(props) {
                         <input type='file' id='track-audio' name='audio' style={{'width': '250px'}} accept='audio/*' />
                         <div className='break' />
                     </div>
-                    <h5>Pick one of your albums for your track</h5>
+                    <h5 className='margin-top'>Pick one of your albums for your track</h5>
                     <div className='flex-layout center-content'>
                     {albums.map((value, index) => {
                             return(
@@ -123,9 +159,25 @@ function Create(props) {
                             )
                     })}
                     </div>
+                    <h5 className='margin-top'>Pick a music kind for your track</h5>
+                    <div>
+                        {kinds.map((value, index) => {
+                            return(
+                                <Button key={index+0.2}
+                                        variant={value.id===currKind ? 'success' : 'primary'}
+                                        className='margin'
+                                        onClick={()=>{setCurrKind(value.id)}}>
+                                    {value.title}
+                                </Button>
+                            )
+                        })}
+                    </div>
                     <Button type='submit' variant='success' className='margin-top-small' onClick={submit}>Add</Button>
                 </form>            
             
+            }
+            {!albums.length && what=='track' &&
+                <Error message="You need to upload at least one album, so that you can attach your track to it." />
             }
             {err &&
                 <Error message={err} />
