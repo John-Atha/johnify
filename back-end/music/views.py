@@ -87,8 +87,9 @@ class Users(APIView):
                 #if user.is_valid():
                 try:
                     user.save()
-                    return Response(action.data, status.HTTP_200_OK)
-                except Exception:
+                    return Response(UserSerializer(user).data, status.HTTP_200_OK)
+                except Exception as e:
+                    print(e)
                     return Response('Invalid credentials.', status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response("Passwords don't match", status=status.HTTP_400_BAD_REQUEST)
@@ -572,10 +573,11 @@ class AlbumsRanking(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        albums = paginate(request.GET.get('start'), request.GET.get('end'), Album.objects.all().order_by('-fans'))
+        albums = paginate(request.GET.get('start'), request.GET.get('end'), list(set(Album.objects.all().order_by('-fans'))))
         try:
             albums = [AlbumSerializer(album, context={"request": request}).data for album in albums]
-        except Exception:
+        except Exception as e:
+            print(e)
             return albums
         return Response(albums, status=status.HTTP_200_OK)
 
@@ -583,7 +585,7 @@ class TracksRanking(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        tracks = paginate(request.GET.get('start'), request.GET.get('end'), Track.objects.all().order_by('-fans'))
+        tracks = paginate(request.GET.get('start'), request.GET.get('end'), list(set(Track.objects.all().order_by('-fans'))))
         try:
             tracks = [TrackSerializer(track, context={"request": request}).data for track in tracks]
         except Exception:
