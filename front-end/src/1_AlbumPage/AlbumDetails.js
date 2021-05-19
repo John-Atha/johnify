@@ -74,7 +74,7 @@ function AlbumDetails(props) {
 
 
     return(
-        <div className="famous-skeleton" style={{'paddingBottom': '20vh'}}>
+        <div className='famous-skeleton padding-bottom'>
             <AlbumHeader album={album} tracks={tracks} user={user} />
             {!album &&
                 <Error message='Oops, album not found...' />

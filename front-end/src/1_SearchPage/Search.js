@@ -13,7 +13,7 @@ function Search(props) {
     }
 
     return (
-        <div className="famous-skeleton" style={{'paddingBottom': '20vh'}}>
+        <div className="famous-skeleton padding-bottom">
             <SearchBar playing={playing} upd={updPlaying} />
             <div className='margin-top' />
             <Kinds playing={playing} upd={updPlaying} />

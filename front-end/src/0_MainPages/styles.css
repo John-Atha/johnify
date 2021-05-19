@@ -19,9 +19,11 @@
     width: 150px;
 }
 .famous-skeleton {
-    max-width: calc(99.5vw - 150px);
+    width: calc(99.5vw - 150px);
+    margin-left: 5px;
+    overflow-y: scroll;
+    height: inherit;
 }
-
 .home-page-desktop {
     background-color: black;
     color: white;

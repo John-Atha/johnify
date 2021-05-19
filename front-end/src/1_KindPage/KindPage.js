@@ -24,7 +24,7 @@ function KindPage(props) {
     }
 
     return(
-        <div className="famous-skeleton" style={{'paddingBottom': '20vh'}}>
+        <div className="famous-skeleton padding-bottom">
             <h3>{kind ? kind.title : ''}</h3>
             {kind &&
                 <OneKind playing={playing} upd={updPlaying} current={props.id} />        

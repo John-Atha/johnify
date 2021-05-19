@@ -61,7 +61,7 @@ function TrackDetails(props) {
 
 
     return(
-        <div className="famous-skeleton" style={{'paddingBottom': '200px'}}>
+        <div className="famous-skeleton padding-bottom">
             <TrackHeader track={track} user={user} />
             {!track &&
                 <Error message='Oops, track not found...' />

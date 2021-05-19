@@ -42,7 +42,7 @@ function ProfileSkeleton(props) {
 
     if (user) {
         return(
-            <div className='famous-skeleton' style={{'paddingBottom': '20vh'}}>
+            <div className='famous-skeleton padding-bottom'>
                 <ProfileHeader user={user} myId={myId} />
                 {user.id===myId && user.is_artist &&
                     <div className='margin-top'>

@@ -117,7 +117,7 @@ function Create(props) {
     }
 
     return (
-        <div className='famous-skeleton center-content'>
+        <div className='famous-skeleton center-content' style={{'paddingBottom': '10px'}}>
             <h3 className='margin-top'>Hello, {user ? user.username : ''}<br></br> Feel free to share your art with us!</h3>
             {!err &&
                 <div>
