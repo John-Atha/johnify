@@ -1,6 +1,7 @@
 ## Johnify
 
 * A responsive music web app (like Spotify)
+* My final project for the Harvard CS50 Web Programming Course with Python and Javascript
 
 ### Technologies used:
 * back-end:
@@ -69,6 +70,22 @@ Back-end and front-end were developed as seperate modules.
         - [x] The front-end is up in the address: http://localhost:3000
         - Important note:
             - If you wish to change the address of the front-end, you will also need to update the `CORS_ALLOWED_ORIGINS` and `CSRF_COOKIE_DOMAIN` fields of the `back-end/johnify/settings.py` file to allow the `front-end` module to communicate with the `back-end`
+
+### Python packages used in back-end
+
+* [Django Rest Framework](https://www.django-rest-framework.org)
+* [Django Rest Framework Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest)
+* [Django cors headers](https://pypi.org/project/django-cors-headers)
+* [Pillow](https://pypi.org/project/Pillow)
+
+### Npm packages used in front-end
+
+* [React Bootstrap](https://react-bootstrap.github.io)
+* [React Router](https://reactrouter.com)
+* [Axios](https://www.axios.com)
+* [React Notifications Component](https://www.npmjs.com/package/react-notifications-component)
+* [React Audio Player](https://www.npmjs.com/package/react-audio-player)
+
 ---
 
 * Developer: Giannis Athanasiou
