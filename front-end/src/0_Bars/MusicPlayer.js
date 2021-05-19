@@ -15,6 +15,7 @@ function MusicPlayer(props) {
             <div className='flex-layout'
                  style={{'height': '100%'}}>
                 <img src={playing? (playing.photo_url || track) : track}
+                    alt='playing-track'
                     style={{'height': '100%'}} />
 
                 <div className='playing-info-container'>

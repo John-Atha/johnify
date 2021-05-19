@@ -32,11 +32,11 @@ function MyNavLink(props) {
     }
 
     return(
-        <button className={window.innerWidth>700 ? 'flex-layout navbar-link-side' : 'navbar-link-bottom'} onClick={redirect}>
+        <button className={window.innerWidth>800 ? 'flex-layout navbar-link-side' : 'navbar-link-bottom'} onClick={redirect}>
             {props.icon &&
                 <img src={props.icon} className='navbar-icon' alt={props.alt} />
             }
-            {window.innerWidth>700 &&
+            {window.innerWidth>800 &&
                 <div style={{'margin': '10px 5px'}}>
                     {props.name}
                 </div>  
@@ -64,7 +64,7 @@ function MyNavbar() {
         }
     }, [])
     return(
-        <div className={window.innerWidth > 700 ? 'my-navbar-side center-content' : 'my-navbar-bottom flex-layout center-content'}>
+        <div className={window.innerWidth > 800 ? 'my-navbar-side center-content' : 'my-navbar-bottom flex-layout center-content'}>
             <MyNavLink name='Johnify' dest='/' icon={home} user={user} alt='home' />
             <MyNavLink name='Albums' dest='/albums' icon={album} user={user} alt='albums' />
             <MyNavLink name='Tracks' dest='/tracks' icon={track} user={user} alt='tracks' />

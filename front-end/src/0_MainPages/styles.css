@@ -1,4 +1,4 @@
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 800px) {
     .famous-skeleton {
         width: 100vw;
     }
@@ -27,7 +27,7 @@
         margin-left: 5px;
     }
 }
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width: 800px) {
     .famous-skeleton {
         width: calc(99% - 150px);
         margin-left: 5px;

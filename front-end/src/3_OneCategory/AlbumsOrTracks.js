@@ -6,7 +6,6 @@ import Album from './Album';
 import Track from './Track';
 import Error from '../0_MainPages/Error';
 import Button from 'react-bootstrap/Button';
-import ReactAudioPlayer from 'react-audio-player';
 import MusicPlayer from '../0_Bars/MusicPlayer';
 
 import { getAlbumsRanking, getTracksRanking, getFavAlbums, getFavTracks, getUserTracks, getUserAlbums } from '../api/api';
@@ -80,7 +79,7 @@ function AlbumsOrTracks(props) {
                     )
                 })}
             </div>
-            {!noData && (props.how==='all' || props.how==='user') &&
+            {!noData && (props.how==='all' || props.how==='user') && data.length%5===0 &&
                 <Button variant='primary' style={{'marginLeft': '15px'}}
                         onClick={()=>{setStart(start+5);setEnd(end+5)}}>
                     See more

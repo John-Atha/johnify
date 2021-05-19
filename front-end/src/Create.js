@@ -110,8 +110,18 @@ function Create(props) {
             })
             .catch(err => {
                 console.log(err);
-                if (err.response.status===400)
-                createNotification('danger', 'Sorry,', err.response.data);
+                if (err.response.status===400) {
+                    let res = 'Invalid data';
+                    const mess = err.response.data;
+                    if (typeof(mess)==='string') res=mess;
+                    else if (mess['file']) {
+                        if (typeof(mess['file'][0])==='string') res=mess['file'][0];
+                    }
+                    createNotification('danger', 'Sorry,', res);
+                }
+                else {
+                    createNotification('danger', 'Sorry,', 'Invalid data');
+                }
             })
         }
     }

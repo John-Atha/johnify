@@ -17,7 +17,7 @@ function KindPage(props) {
         .catch(err => {
             setKind(null);
         })
-    }, [])
+    }, [props.id])
 
     const updPlaying = (track) => {
         setPlaying(track);
