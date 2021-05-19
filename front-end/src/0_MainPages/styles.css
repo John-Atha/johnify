@@ -1,4 +1,4 @@
-@media only screen and (min-width: 800px) {
+/*@media only screen and (min-width: 800px) {
     .my-navbar {
         width: 10vw;
     }
@@ -13,6 +13,13 @@
     .famous-skeleton {
         width: 80vw;
     }
+}*/
+
+.my-navbar {
+    width: 150px;
+}
+.famous-skeleton {
+    max-width: calc(99.5vw - 150px);
 }
 
 .home-page-desktop {
@@ -42,8 +49,13 @@
 .navbar-link {
     color: white;
     text-decoration: none;
-    margin: 15px 5px;
+    margin: 25px 5px;
     border-radius: 5px;
+    background-color: inherit;
+    border: none;
+    padding: 0;
+    font-size: 20px;
+    width: 95%;
 }
 .navbar-link:hover {
     background-color: grey;

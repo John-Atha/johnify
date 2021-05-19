@@ -15,35 +15,31 @@ import search from '../images/search.png';
 import { createNotification } from '../createNotification';
 
 function MyNavLink(props) {
+    const redirect = () => {
+        switch(props.name) {
+            case('Favourites'):
+                if (props.user) window.location.href=props.dest;
+                else createNotification('danger', 'Sorry,', "You cannot have a favourites list without an account.");
+                break;
+            case('Logout'):
+                localStorage.setItem('token', null);
+                window.location.href='/';
+                break;  
+            default:
+                window.location.href=props.dest;
+                break;
+        }
+    }
+
     return(
-        <div className='flex-layout navbar-link'>
+        <button className='flex-layout navbar-link' onClick={redirect}>
             {props.icon &&
                 <img src={props.icon} className='navbar-icon' alt={props.alt} />
             }
-            {props.name==='Logout' &&
-                <a className='navbar-link'
-                    href='#'
-                   onClick={()=>{localStorage.setItem('token', null); window.location.href='/';}}>
-                    {props.name}
-                </a>
-            }
-            { props.name!=='Logout' && props.name==='Favourites' &&
-                <a className='navbar-link'
-                        href='#'
-                        onClick={()=> {
-                             if (props.user) window.location.href=props.dest;
-                             else createNotification('danger', 'Sorry,', "You cannot have a favourites list without an account.");
-                        }}>
-                    Favourites
-                </a>
-            }
-            { props.name!=='Logout' && props.name!=='Favourites' && props.case==='user' &&
-                <a className='navbar-link' href={props.dest}>{props.name}</a>
-            }
-            { props.name!=='Logout' && props.name!=='Favourites' &&props.case!=='user' &&
-                <a className='navbar-link' href={props.dest}>{props.name}</a>
-            }
-        </div>
+            <div style={{'margin': '10px 5px'}}>
+                {props.name}
+            </div>
+        </button>
     )
 
 }

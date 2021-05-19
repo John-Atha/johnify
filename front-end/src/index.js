@@ -5,17 +5,9 @@ import { BrowserRouter, Switch, Route, useParams } from "react-router-dom";
 import ReactNotifications from "react-notifications-component";
 import 'react-notifications-component/dist/theme.css'
 import 'bootstrap/dist/css/bootstrap.css';
-
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 
 import Home from './0_MainPages/Home';
-/*
-import AlbumPage from './1_AlbumPage/AlbumPage';
-import AllPage from './0_MainPages/AllPage';
-import FavsPage from './0_MainPages/FavsPage';
-import TrackPage from './1_TrackPage/TrackPage';
-*/
 import LoginSkeleton from './0_LoginRegister/LoginSkeleton';
 
 const FindAlbum = () => {
@@ -81,8 +73,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

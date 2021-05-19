@@ -116,7 +116,7 @@ function Register() {
             </form>
             <div className='break' />
             <div className='margin-top-small'>Already have an account?</div>
-            <a href='/register' style={{'color': 'lightblue', 'textDecoration': 'none'}}>Login</a>
+            <a href='/login' style={{'color': 'lightblue', 'textDecoration': 'none'}}>Login</a>
         </div>
     )
 }
