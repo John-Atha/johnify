@@ -41,6 +41,6 @@ class Track(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="tracks", null=False, blank=False)
     date = models.DateField(default=date.today)
     fans = models.ManyToManyField(User, related_name='fav_tracks', blank=True)
-    kinds = models.ManyToManyField(Kind, related_name="tracks", blank=True, null=True)
+    kinds = models.ManyToManyField(Kind, related_name="tracks", blank=True)
     def __str__(self):
         return f"{self.id}, {self.title}"
