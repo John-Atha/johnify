@@ -1,37 +1,84 @@
-/*@media only screen and (min-width: 800px) {
-    .my-navbar {
-        width: 10vw;
-    }
+@media only screen and (max-width: 700px) {
     .famous-skeleton {
-        width: 89vw;
+        width: 100vw;
+    }
+    .music-player {
+        bottom: 50px;
+        height: 70px;
+        width: 100vw;
+    }
+    .one-album-container {
+        width: 90vw;
+        margin-left: 5vw;    
+    }
+    .playing-title {
+        font-size: 15px;
+    }
+    .playing-artist {
+        font-size: 13px;
+    }
+    .playing-info-container {
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+    .audio-player {
+        width: 150px;
+        margin-top: 5px;
+        margin-left: 5px;
     }
 }
-@media only screen and (max-width: 800px) {
-    .my-navbar {
-        width: 20vw;
-    }
+@media only screen and (min-width: 700px) {
     .famous-skeleton {
-        width: 80vw;
+        width: calc(99% - 150px);
+        margin-left: 5px;
     }
-}*/
-
-.my-navbar {
+    .music-player {
+        bottom: 0px;
+        height: 15vh;
+        width: 98vw;
+    }
+    .one-album-container {
+        width: 400px;
+    }
+    .playing-title {
+        font-size: 25px;
+    }
+    .playing-artist {
+        font-size: 20px;
+    }
+    .playing-info-container {
+        margin-top: 20px;
+        margin-left: 15px;
+    }
+    .audio-player {
+        width: 300px;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+}
+.my-navbar-side, .my-navbar-bottom {
+    border-right: 1px solid grey;
+    background-color: black;
+}
+.my-navbar-side {
     width: 150px;
+    height: inherit;
+}
+.my-navbar-bottom {
+    width: 100vw;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+    z-index: 100;
+    border-top: 1px solid grey;
 }
 .famous-skeleton {
-    width: calc(99.5vw - 150px);
-    margin-left: 5px;
     overflow-y: scroll;
     height: inherit;
 }
 .home-page-desktop {
     background-color: black;
     color: white;
-}
-.my-navbar {
-    border-right: 1px solid grey;
-    background-color: rgb(18, 17, 17);
-    height: inherit;
 }
 .main {
     width: 100vw;
@@ -40,31 +87,46 @@
 .music-player {
     z-index: 10;
     position: absolute;
-    bottom: 0;
     left: 0;
-    height: 15vh;
-    width: 98vw;
     margin: 0;
     border-top: 1px solid grey;
-    background-color: rgb(18, 17, 17);
+    background-color: black;
 }
-.navbar-link {
+.navbar-link-side, .navbar-link-bottom {
     color: white;
     text-decoration: none;
-    margin: 25px 5px;
     border-radius: 5px;
     background-color: inherit;
     border: none;
     padding: 0;
     font-size: 20px;
-    width: 95%;
 }
-.navbar-link:hover {
+.navbar-link-bottom {
+    margin: 0px 10px;
+    width: auto;
+    height: 100%;
+}
+.navbar-link-side {
+    margin: 30px 0px;
+    width: 98%;
+}
+.navbar-link-side:hover {
     background-color: grey;
     cursor: pointer;
 }
-.navbar-icon {
+.navbar-link-side .navbar-icon {
     height: 20px;
     margin-top: 15px;
     margin-left: 5px;
+}
+.navbar-link-bottom .navbar-icon {
+    height: 30px;
+}
+.playing-title {
+    color: white;
+    text-decoration: none;
+}
+.playing-artist {
+    color: white;
+    text-decoration: none;
 }

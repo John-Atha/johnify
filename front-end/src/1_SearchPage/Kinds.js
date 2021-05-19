@@ -28,7 +28,7 @@ function Kinds(props) {
                 {kinds.map((value, index) => {
                     return(
                         <Button key={index}
-                                className='margin'
+                                style={{'margin': '10px'}}
                                 variant={value.id === current ? 'success' : 'primary'}
                                 onClick={()=>{setCurrent(value.id);}}>
                             {value.title}

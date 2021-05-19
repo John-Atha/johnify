@@ -12,7 +12,7 @@ function Track(props) {
             <div className='flex-layout'>
                 <img src={props.track.photo_url || track} alt='track'
                     onClick={()=>{window.location.href=`/tracks/${props.track.id}`}}
-                    style={{'height': !props.track.photo_url ? '90px': '100px', 'marginTop': !props.track.photo_url ? '5px': '0px', 'borderRadius': '5px'}}/>
+                    className='track-photo'/>
                 <div style={{'marginLeft': '5px', 'padding': '5px'}}>
                     <div style={{'fontSize': '20px'}}
                         onClick={()=>{window.location.href=`/tracks/${props.track.id}`}}>

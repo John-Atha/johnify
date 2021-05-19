@@ -16,26 +16,24 @@ function MusicPlayer(props) {
                  style={{'height': '100%'}}>
                 <img src={playing? (playing.photo_url || track) : track}
                     style={{'height': '100%'}} />
-                <div style={{'marginTop': '20px', 'marginLeft': '15px'}}>
-                    <a style={{'color': 'white',
-                               'textDecoration': ('none'),
-                               'fontSize': '25px'}}
+
+                <div className='playing-info-container'>
+                    <a  className='playing-title'
                         href={playing ? `/tracks/${playing.id}` : '#'}>
                         {playing ? playing.title : 'None'}
                     </a>
                     <div className='break' />
                     {playing &&
-                    <a style={{'color': 'white',
-                               'textDecoration': ('none'),
-                               'fontSize': '20px'}}
+                    <a  className='playing-artist'
                         href={playing ? `/users/${playing.album.artist.id}` : '#'}>
                         {playing.album.artist.username}
                      </a>
                     }
                 </div>
             </div>
+
             <ReactAudioPlayer
-                style={{'width': '300px', 'marginTop': '20px', 'marginLeft': '20px'}}
+                className='audio-player'
                 src={playing ? playing.file : null}
                 autoPlay
                 controls

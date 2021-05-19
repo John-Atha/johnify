@@ -2,7 +2,6 @@
     background-color: rgb(18, 17, 17);
     border-radius: 6px;
     height: 100px;
-    min-width: 400px;
     padding-right: 5px;
     margin: 15px;
 }
@@ -16,4 +15,15 @@
     text-decoration: none;
     font-size: 15px;
 }
-
+.track-photo {
+    height: 100px;
+    margin-top: 0px;
+    border-radius: 5px;
+    max-width: 30%;
+}
+.album-photo {
+    height: 100px;
+    margin-top: 0px;
+    border-radius: 5px;
+    max-width: 50%;
+}

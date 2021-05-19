@@ -71,7 +71,7 @@ function SearchBar(props) {
     }, [])
 
     return (
-        <div className='margin-top'>
+        <div className='margin-top-small'>
             <Form onSubmit={(event) => {event.preventDefault();}} className="flex-layout marign-top-smaller">
                 <FormControl 
                     style={{'width': '270px', 'marginLeft': 'auto', 'marginRight': 'auto'}}
