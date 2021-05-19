@@ -41,6 +41,7 @@ function TrackRow(props) {
                 removeFavTrack(userId, track.id)
                 .then(response => {
                     updateFavs(response.data.fans);
+                    createNotification('warning', 'Hello', 'Track removed from favourites.');
                 })
                 .catch(err => {
                     setLiked(false);
@@ -50,6 +51,7 @@ function TrackRow(props) {
                 addFavTrack(userId, track.id)
                 .then(response => {
                     updateFavs(response.data.fans);
+                    createNotification('success', 'Hello', 'Track added to favourites.');
                 })
                 .catch(err => {
                     setLiked(true);

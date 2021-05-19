@@ -33,13 +33,14 @@ function AlbumHeader(props) {
 
     const updLike = () => {
         if (!user) {
-            createNotification('danger', 'Sorry', 'You cannot do this without an account')
+            createNotification('danger', 'Sorry', 'You cannot do this without an account');
         }
         else {
             if (liked) {
                 removeFavAlbum(user.id, album.id)
                 .then(response => {
                     updateFavs(response.data.fans);
+                    createNotification('warning', 'Hello', 'Album removed from favourites.');
                 })
                 .catch(err => {
                     setLiked(false);
@@ -49,6 +50,7 @@ function AlbumHeader(props) {
                 addFavAlbum(user.id, album.id)
                 .then(response => {
                     updateFavs(response.data.fans);
+                    createNotification('success', 'Hello', 'Album added to favourites.');
                 })
                 .catch(err => {
                     setLiked(true);
