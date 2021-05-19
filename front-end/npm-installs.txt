@@ -1,3 +1,6 @@
 react-router-dom
-react-notifications-component
+bootstrap
+react-bootstrap
 axios
+react-notifications-component
+react-audio-player
