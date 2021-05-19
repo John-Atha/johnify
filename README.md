@@ -88,6 +88,11 @@ Back-end and front-end were developed as seperate modules.
 
 ---
 
+* Original repo at: https://github.com/John-Atha/johnify
+* Sort presentation at: https://www.youtube.com/watch?v=r2ekYxVO6hQ
+
+---
+
 * Developer: Giannis Athanasiou
 * Github username: John-Atha
 * Email: giannisj3@gmail.com
